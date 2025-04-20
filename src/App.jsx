@@ -17,7 +17,7 @@ function App() {
   return (
     <Router>
       <Navbar />
-      <AIChatWidget apiKey="AIzaSyD08-TBmmu9YIECh-qrUr0sXu97MMhqKYc" />
+      <AIChatWidget apiKey="API_KEY_GEMINI" />
       <Routes>
         {/* Main Pages */}
         <Route path="/" element={<HomePage />} />

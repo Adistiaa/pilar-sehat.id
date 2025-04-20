@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --text: #01130c;
+    --background: #f6fefc;
+    --primary: #1ff498;
+    --secondary: #72e4f8;
+    --accent: #50b7f7;
+  }
+  .dark {
+    --text: #ecfef7;
+    --background: #010907;
+    --primary: #0be084;
+    --secondary: #07798d;
+    --accent: #086faf;
+  }
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

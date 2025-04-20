@@ -1,0 +1,15 @@
+src/
+├── App.jsx
+├── main.jsx
+├── pages/
+│   ├── HomePage.jsx
+│   ├── AboutPage.jsx
+│   ├── ForumPage.jsx
+│   ├── ContactPage.jsx
+│   ├── NotFoundPage.jsx
+│   └── features/
+│       ├── PhysicalHealth.jsx
+│       ├── MentalHealthEmotions.jsx
+│       ├── EnvironmentalHealth.jsx
+│       ├── SocialConnections.jsx
+│       └── FinancialOccupationalWellbeing.jsx

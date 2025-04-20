@@ -11,13 +11,16 @@ import FinancialOccupationalWellbeing from "./pages/features/FinancialOccupation
 import NotFoundPage from "./pages/NotFoundPage"
 import Navbar from "./components/Navbar"
 import AIChatWidget from "./components/AIChatWidget.jsx"
+import Footer from "./components/Footer.jsx"
+
 
  
 function App() {
+  const URL = import.meta.env.VITE_URL
   return (
     <Router>
       <Navbar />
-      <AIChatWidget apiKey="API_KEY_GEMINI" />
+      <AIChatWidget apiKey={URL} />
       <Routes>
         {/* Main Pages */}
         <Route path="/" element={<HomePage />} />
@@ -35,6 +38,7 @@ function App() {
         {/* Optional 404 Not Found Page */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
+      <Footer/>
     </Router>
   )
 }

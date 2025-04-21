@@ -132,7 +132,7 @@ const AIChatWidget = ({ apiKey }) => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
             transition={{ duration: 0.2 }}
-            className="fixed z-50 bg-[var(--accent)] text-white rounded-lg px-3 py-2 shadow-lg flex items-center cursor-pointer hover:bg-[#086faf] transition-colors"
+            className="fixed z-50 bg-[#50b7f7] text-white rounded-lg px-3 py-2 shadow-lg flex items-center cursor-pointer hover:bg-[#086faf] transition-colors"
             style={{
               top: `${selectionPosition.top}px`,
               left: `${selectionPosition.left}px`,
@@ -155,7 +155,7 @@ const AIChatWidget = ({ apiKey }) => {
               animate={{ scale: 1 }}
               transition={{ type: 'spring', stiffness: 300, damping: 20 }}
               onClick={openChat}
-              className="bg-[var(--accent)] text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all"
+              className="bg-[#50b7f7] text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all"
               aria-label="Open AI Chat"
             >
               <StarsIcon className="w-6 h-6" />
@@ -178,7 +178,7 @@ const AIChatWidget = ({ apiKey }) => {
             className="bg-white rounded-2xl shadow-xl overflow-hidden w-80 h-[500px] flex flex-col border border-gray-200"
           >
             {/* Chat Header */}
-            <div className="bg-[var(--accent)] text-white p-4 flex justify-between items-center">
+            <div className="bg-[#50b7f7] text-white p-4 flex justify-between items-center">
               <h3 className="font-semibold">Artificial Intelligence Assistant</h3>
               <button
                 onClick={closeChat}
@@ -207,7 +207,7 @@ const AIChatWidget = ({ apiKey }) => {
                   <div
                     className={`rounded-lg p-3 text-sm max-w-[80%] ${
                       msg.sender === 'user'
-                        ? 'bg-[var(--accent)] text-white rounded-br-none'
+                        ? 'bg-[#50b7f7] text-white rounded-br-none'
                         : 'bg-white border border-gray-200 rounded-bl-none'
                     }`}
                   >
@@ -246,12 +246,12 @@ const AIChatWidget = ({ apiKey }) => {
                   onChange={(e) => setInputMessage(e.target.value)}
                   onKeyDown={handleKeyDown}
                   placeholder="Type your message..."
-                  className="flex-1 border border-gray-300 rounded-full py-2 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent"
+                  className="flex-1 border border-gray-300 rounded-full py-2 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-[#50b7f7] focus:border-transparent"
                   autoFocus
                 />
                 <button
                   type="submit"
-                  className="bg-[var(--accent)] text-white p-2 rounded-full hover:opacity-90 disabled:opacity-50 transition-opacity"
+                  className="bg-[#50b7f7] text-white p-2 rounded-full hover:opacity-90 disabled:opacity-50 transition-opacity"
                   disabled={!inputMessage.trim() || isTyping}
                 >
                   <SendHorizonal className="w-4 h-4" />

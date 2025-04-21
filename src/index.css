@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer base {
   :root {
     --text: #01130c;
@@ -23,4 +25,21 @@
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+.testimoni-swiper {
+  overflow: hidden !important; /* HIDDENIN total */
+}
+
+.testimoni-swiper .swiper-wrapper {
+  padding-bottom: 0px;
+}
+
+.testimoni-swiper .swiper-slide {
+  display: flex;
+  justify-content: center;
+}
+
+html, body {
+  overflow-x: hidden; /* TAMBAHAN SUPAYA BODY GAK SCROLL HORIZONTAL */
 }

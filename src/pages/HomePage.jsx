@@ -33,7 +33,7 @@ const HomePage = () => {
   }, []);
 
   return (
-    <div className="min-h-screen text-[#01130c] bg-[#f6fefc]">
+    <div className="min-h-screen text-[#01130c] bg-[#f6fefc]" id="content">
       {/* Hero Section with Dynamic Animation */}
       <section className="relative py-20 md:py-32 px-4 md:px-8 lg:px-16 overflow-hidden">
         {/* Animated background elements */}

@@ -11,6 +11,8 @@ const AIChatWidget = ({ apiKey }) => {
   const [isTyping, setIsTyping] = useState(false);
   const [selectionPosition, setSelectionPosition] = useState(null);
   const [selectedText, setSelectedText] = useState('');
+  const [isClosing, setIsClosing] = useState(false);
+  const [showPulse, setShowPulse] = useState(false);
   const messagesEndRef = useRef(null);
   const selectionButtonRef = useRef(null);
 
@@ -67,13 +69,21 @@ const AIChatWidget = ({ apiKey }) => {
   const openChat = () => {
     setIsOpen(true);
     setShowChat(true);
+    // Tambahkan efek pulse saat widget dibuka
+    setShowPulse(true);
+    setTimeout(() => setShowPulse(false), 1000);
   };
 
   const closeChat = () => {
-    setShowChat(false);
+    // Animasi closing sebelum menutup widget
+    setIsClosing(true);
     setTimeout(() => {
-      setIsOpen(false);
-    }, 200);
+      setIsClosing(false);
+      setShowChat(false);
+      setTimeout(() => {
+        setIsOpen(false);
+      }, 200);
+    }, 300);
   };
 
   const handleSendMessage = async (e) => {
@@ -155,7 +165,7 @@ const AIChatWidget = ({ apiKey }) => {
               animate={{ scale: 1 }}
               transition={{ type: 'spring', stiffness: 300, damping: 20 }}
               onClick={openChat}
-              className="bg-[#50b7f7] text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all"
+              className="bg-[#50b7f7] text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all relative"
               aria-label="Open AI Chat"
             >
               <StarsIcon className="w-6 h-6" />
@@ -175,17 +185,61 @@ const AIChatWidget = ({ apiKey }) => {
               damping: 25,
               duration: 0.3
             }}
-            className="bg-white rounded-2xl shadow-xl overflow-hidden w-80 h-[500px] flex flex-col border border-gray-200"
+            className="bg-white rounded-2xl shadow-xl overflow-hidden w-80 h-[500px] flex flex-col border border-gray-200 relative"
           >
+            {/* Pulse animation at corners */}
+            {showPulse && (
+              <>
+                {/* Top-right corner pulse */}
+                <div className="absolute top-0 right-0">
+                  <motion.div 
+                    initial={{ scale: 0, opacity: 0.8 }}
+                    animate={{ scale: 2, opacity: 0 }}
+                    transition={{ duration: 1 }}
+                    className="w-3 h-3 bg-[#50b7f7] rounded-full"
+                  />
+                </div>
+                {/* Bottom-right corner pulse */}
+                <div className="absolute bottom-0 right-0">
+                  <motion.div 
+                    initial={{ scale: 0, opacity: 0.8 }}
+                    animate={{ scale: 2, opacity: 0 }}
+                    transition={{ duration: 1, delay: 0.1 }}
+                    className="w-3 h-3 bg-[#50b7f7] rounded-full"
+                  />
+                </div>
+                {/* Bottom-left corner pulse */}
+                <div className="absolute bottom-0 left-0">
+                  <motion.div 
+                    initial={{ scale: 0, opacity: 0.8 }}
+                    animate={{ scale: 2, opacity: 0 }}
+                    transition={{ duration: 1, delay: 0.2 }}
+                    className="w-3 h-3 bg-[#50b7f7] rounded-full"
+                  />
+                </div>
+                {/* Top-left corner pulse */}
+                <div className="absolute top-0 left-0">
+                  <motion.div 
+                    initial={{ scale: 0, opacity: 0.8 }}
+                    animate={{ scale: 2, opacity: 0 }}
+                    transition={{ duration: 1, delay: 0.3 }}
+                    className="w-3 h-3 bg-[#50b7f7] rounded-full"
+                  />
+                </div>
+              </>
+            )}
+
             {/* Chat Header */}
             <div className="bg-[#50b7f7] text-white p-4 flex justify-between items-center">
               <h3 className="font-semibold">Artificial Intelligence Assistant</h3>
-              <button
+              <motion.button
                 onClick={closeChat}
                 className="p-1 rounded-full hover:bg-white/20 transition-colors"
+                animate={isClosing ? { rotate: 90, scale: 0.8 } : { rotate: 0, scale: 1 }}
+                transition={{ duration: 0.3 }}
               >
                 <X className="w-5 h-5" />
-              </button>
+              </motion.button>
             </div>
 
             {/* Chat Messages */}

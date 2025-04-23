@@ -22,14 +22,31 @@ import { AnimatePresence, motion } from "framer-motion";
 
 function App() {
   const URL = import.meta.env.VITE_URL;
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 3000); // Loading muncul 3 detik
+    // This effect runs only on initial render
+    // We specifically want to detect page refreshes
 
-    return () => clearTimeout(timer);
+    // Check if this is a page load/refresh
+    const isPageRefresh = !performance.navigation ||
+      performance.navigation.type === 1 ||
+      !sessionStorage.getItem('app_loaded');
+
+    if (isPageRefresh) {
+      // Set loading to true on page refresh
+      setLoading(true);
+
+      // Mark that the app has been loaded in this session
+      sessionStorage.setItem('app_loaded', 'true');
+
+      // Show loading for 3 seconds
+      const timer = setTimeout(() => {
+        setLoading(false);
+      }, 7000);
+
+      return () => clearTimeout(timer);
+    }
   }, []);
 
   return (
@@ -41,7 +58,7 @@ function App() {
               key="loader"
               initial={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 6 }}
+              transition={{ duration: 0.6 }}
               className="fixed inset-0 z-50 flex items-center justify-center"
             >
               <LoadingScreenTime />

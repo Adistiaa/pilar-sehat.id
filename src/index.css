@@ -3,7 +3,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 
-@layer base {
+/* @layer base {
   :root {
     --text: #01130c;
     --background: #f6fefc;
@@ -18,7 +18,7 @@
     --secondary: #07798d;
     --accent: #086faf;
   }
-}
+} */
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
@@ -43,4 +43,24 @@
 
 html, body {
   overflow-x: hidden; /* TAMBAHAN SUPAYA BODY GAK SCROLL HORIZONTAL */
+}
+
+.swiper-pagination-bullet {
+  background-color: #64a2a1; /* Default bullet color */
+  opacity: 0.5;
+  transition: all 0.3s;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: #1ff498; /* Active bullet color */
+  opacity: 1;
+}
+
+/* (Optional) Dark Mode Support */
+.dark .swiper-pagination-bullet {
+  background-color: #aacfcc;
+}
+
+.dark .swiper-pagination-bullet-active {
+  background-color: #0be084;
 }

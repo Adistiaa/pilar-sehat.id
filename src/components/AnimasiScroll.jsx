@@ -1,9 +1,11 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useAnimation, useInView } from "framer-motion";
 
 const useScrollAnimations = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [activeSection, setActiveSection] = useState(null);
+  const animationFrameId = useRef(null);
+  const lastScrollY = useRef(0);
 
   // Section refs
   const refs = {
@@ -17,17 +19,34 @@ const useScrollAnimations = () => {
     cta: useRef(null),
   };
 
-  // Track section visibility
-  const isContainerInView = useInView(refs.container, { once: false, amount: 0.1 });
-  const isHeroInView = useInView(refs.hero, { once: false, amount: 0.2 });
-  const isTrustInView = useInView(refs.trust, { once: false, amount: 0.1 });
-  const isFeaturesInView = useInView(refs.features, { once: false, amount: 0.1 });
-  const isWhyChooseUsInView = useInView(refs.whyChooseUs, { once: false, amount: 0.1 });
-  const isFaq = useInView(refs.faq, { once: false, amount: 0.1 });
-  const isTestimoni = useInView(refs.testimoni, { once: false, amount: 0.1 });
-  const isCtaInView = useInView(refs.cta, { once: false, amount: 0.1 });
+  // Optimized intersection observer thresholds
+  const observerOptions = {
+    rootMargin: '0px 0px -15% 0px', // Triggers when 15% of element is visible
+    threshold: 0.05
+  };
 
-  // Animation controls
+  // Track section visibility with optimized thresholds
+  const isContainerInView = useInView(refs.container, { 
+    once: false,
+    ...observerOptions
+  });
+  const isHeroInView = useInView(refs.hero, { 
+    once: false,
+    amount: 0.15, // Lower threshold for hero section
+    margin: "0px 0px -20% 0px"
+  });
+  const isTrustInView = useInView(refs.trust, observerOptions);
+  const isFeaturesInView = useInView(refs.features, observerOptions);
+  const isWhyChooseUsInView = useInView(refs.whyChooseUs, observerOptions);
+  const isFaq = useInView(refs.faq, observerOptions);
+  const isTestimoni = useInView(refs.testimoni, observerOptions);
+  const isCtaInView = useInView(refs.cta, { 
+    once: false,
+    amount: 0.1,
+    margin: "0px 0px -10% 0px" // Earlier trigger for CTA
+  });
+
+  // Animation controls with initial states
   const controls = {
     hero: useAnimation(),
     trust: useAnimation(),
@@ -38,66 +57,122 @@ const useScrollAnimations = () => {
     cta: useAnimation(),
   };
 
-  // Section variants for animations
+  // Lightweight variants optimized for performance
   const sectionVariants = {
     hidden: { 
       opacity: 0, 
-      y: 50,
+      y: 20, // Reduced movement distance
       transition: {
         duration: 0.3,
-        ease: "easeInOut",
+        ease: "easeOut"
       }
     },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.6,
-        ease: [0.16, 0.77, 0.47, 0.97],
+        duration: 0.5,
+        ease: [0.16, 1, 0.3, 1], // Smoother easing
         staggerChildren: 0.05,
-        when: "beforeChildren",
-      }
-    },
-    exit: {
-      opacity: 0,
-      y: -20,
-      transition: {
-        duration: 0.3,
-        ease: "easeIn",
+        when: "beforeChildren"
       }
     }
   };
 
-  // Handle active section detection
-  useEffect(() => {
-    const handleActiveSection = () => {
-      const scrollPosition = window.scrollY + window.innerHeight / 2;
-      setIsVisible(window.scrollY > 300);
+  // Text variants for child elements
+  const textVariants = {
+    hidden: { opacity: 0, y: 10 },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      transition: { 
+        duration: 0.4,
+        ease: [0.16, 1, 0.3, 1]
+      } 
+    },
+  };
 
-      const sections = Object.entries(refs).map(([key, ref]) => ({
+  // Stagger container with optimized timing
+  const staggerContainer = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.08,
+        delayChildren: 0.1, // Reduced initial delay
+      },
+    },
+  };
+
+  // Efficient scroll handler with throttling
+  const handleScroll = useCallback(() => {
+    if (animationFrameId.current) {
+      cancelAnimationFrame(animationFrameId.current);
+    }
+
+    animationFrameId.current = requestAnimationFrame(() => {
+      const currentScrollY = window.scrollY;
+      
+      // Only update if scroll position changed significantly
+      if (Math.abs(currentScrollY - lastScrollY.current) > 30) {
+        setIsVisible(currentScrollY > 100);
+        updateActiveSection();
+        lastScrollY.current = currentScrollY;
+      }
+    });
+  }, []);
+
+  // Active section detection
+  const updateActiveSection = useCallback(() => {
+    const scrollPosition = window.scrollY + (window.innerHeight / 3);
+    
+    const sections = Object.entries(refs)
+      .filter(([key]) => key !== 'container')
+      .map(([key, ref]) => ({
         key,
         top: ref.current?.offsetTop || 0,
         height: ref.current?.offsetHeight || 0,
-      }));
+      }))
+      .sort((a, b) => a.top - b.top);
 
-      const currentSection = sections.find(section =>
-        scrollPosition >= section.top &&
-        scrollPosition < section.top + section.height
-      );
-
-      if (currentSection) {
-        setActiveSection(currentSection.key);
+    for (let i = 0; i < sections.length; i++) {
+      const section = sections[i];
+      if (scrollPosition >= section.top && scrollPosition < section.top + section.height) {
+        if (activeSection !== section.key) {
+          setActiveSection(section.key);
+        }
+        break;
       }
-    };
+    }
+  }, [activeSection]);
 
-    const debouncedScroll = debounce(handleActiveSection, 100);
-    window.addEventListener("scroll", debouncedScroll);
-    handleActiveSection(); // Initial check
+  // Initialize animations on mount
+  useEffect(() => {
+    // Set initial states
+    controls.hero.set("hidden");
+    controls.trust.set("hidden");
+    controls.features.set("hidden");
+    controls.whyChooseUs.set("hidden");
+    controls.faq.set("hidden");
+    controls.testimoni.set("hidden");
+    controls.cta.set("hidden");
 
-    return () => window.removeEventListener("scroll", debouncedScroll);
+    // Initial check
+    updateActiveSection();
   }, []);
 
-  // Trigger animations when sections come into view
+  // Scroll event listener with optimized passive handling
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (animationFrameId.current) {
+        cancelAnimationFrame(animationFrameId.current);
+      }
+    };
+  }, [handleScroll]);
+
+  // Animation triggers with cleanup
   useEffect(() => {
     if (isHeroInView) controls.hero.start("visible");
     if (isTrustInView) controls.trust.start("visible");
@@ -122,6 +197,8 @@ const useScrollAnimations = () => {
     isVisible,
     activeSection,
     sectionVariants,
+    textVariants,
+    staggerContainer,
     visibility: {
       isContainerInView,
       isHeroInView,
@@ -132,15 +209,6 @@ const useScrollAnimations = () => {
       isTestimoni,
       isCtaInView,
     }
-  };
-};
-
-// Simple debounce function
-const debounce = (func, delay) => {
-  let timer;
-  return (...args) => {
-    if (timer) clearTimeout(timer);
-    timer = setTimeout(() => func(...args), delay);
   };
 };
 

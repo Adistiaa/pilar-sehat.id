@@ -1,118 +1,259 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import {
+  Facebook,
+  Twitter,
+  HeartPulse,
+  Brain,
+  Leaf,
+  Users,
+  Home,
+  PenLine,
+  Headset,
+  Handshake,
+  ChartLine,
+} from "lucide-react";
+import logo from "../assets/logo.svg";
+import { useLocation } from "react-router-dom";
 
 const Footer = () => {
+  const location = useLocation();
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.3,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+        damping: 10,
+      },
+    },
+  };
+
   return (
-    <footer className="bg-[#f6fefc] text-[#01130c] py-12 border-t border-[#1ff498]">
+    <footer className="bg-[#f6fefc] dark:bg-[#010907] text-[#01130c] dark:text-[#ecfef7] py-12 border-t border-[#1ff498] dark:border-[#0be084]">
       <div className="container mx-auto px-4">
         {/* Logo and tagline section */}
-        <div className="flex flex-col items-center mb-10">
-          <div className="flex items-center mb-4">
-            <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M21 5.25C12.455 5.25 5.25 12.455 5.25 21C5.25 29.545 12.455 36.75 21 36.75C29.545 36.75 36.75 29.545 36.75 21C36.75 12.455 29.545 5.25 21 5.25Z" stroke="#1ff498" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M21 10.5V21L28 24.5" stroke="#1ff498" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-            <h2 className="text-2xl font-bold ml-3 text-[#01130c]">Pillar Sehat</h2>
-          </div>
-          <p className="text-[#01130c] opacity-80 text-lg">Kesehatan untuk Semua</p>
-        </div>
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="flex flex-col items-center mb-5"
+        >
+          <motion.div
+            variants={itemVariants}
+            className="flex items-center mb-3"
+          >
+            <img src={logo} alt="Pillar Sehat Logo" className="h-35" />
+          </motion.div>
+          <motion.p
+            variants={itemVariants}
+            className="text-[#01130c] dark:text-[#ecfef7] opacity-80 dark:opacity-90 text-lg"
+          >
+            Kesehatan untuk semua masyarakat Indonesia
+          </motion.p>
+        </motion.div>
 
         {/* Navigation links */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="grid grid-cols-1 md:grid-cols-3 gap-10"
+        >
           {/* Main Links */}
-          <div className="flex flex-col items-center md:items-start">
-            <h3 className="text-xl font-semibold mb-6 text-[#01130c] relative">
+          <motion.div
+            variants={itemVariants}
+            className="flex flex-col items-center md:items-start"
+          >
+            <h3 className="text-xl font-semibold mb-6 text-[#01130c] dark:text-[#ecfef7] relative">
               <span className="relative z-10">Halaman Utama</span>
-              <span className="absolute bottom-0 left-0 w-full h-2 bg-[#1ff498] opacity-40 z-0"></span>
+              <span className="absolute bottom-0 left-0 w-full h-2 bg-[#1ff498] dark:bg-[#0be084] opacity-40 z-0"></span>
             </h3>
             <ul className="space-y-3 text-center md:text-left">
-              <li>
-                <Link to="/" className="text-[#01130c] hover:text-[#50b7f7] transition-colors duration-300">
-                  Home
+              <motion.li variants={itemVariants}>
+                <Link
+                  to="/"
+                  className={`flex items-center gap-2 transition-colors duration-300 font-medium ${
+                    location.pathname === "/"
+                      ? "text-[#50b7f7] dark:text-[#0be084] font-semibold"
+                      : "text-[#01130c] dark:text-[#ecfef7] hover:text-[#50b7f7] dark:hover:text-[#086faf]"
+                  }`}
+                >
+                  <Home size={18} /> Home
                 </Link>
-              </li>
-              <li>
-                <Link to="/about" className="text-[#01130c] hover:text-[#50b7f7] transition-colors duration-300">
-                  About
+              </motion.li>
+              <motion.li variants={itemVariants}>
+                <Link
+                  to="/about"
+                  className={`flex items-center gap-2 transition-colors duration-300 font-medium ${
+                    location.pathname === "/about"
+                      ? "text-[#50b7f7] dark:text-[#0be084] font-semibold"
+                      : "text-[#01130c] dark:text-[#ecfef7] hover:text-[#50b7f7] dark:hover:text-[#086faf]"
+                  }`}
+                >
+                  <PenLine size={18} /> About
                 </Link>
-              </li>
-              <li>
-                <Link to="/forum" className="text-[#01130c] hover:text-[#50b7f7] transition-colors duration-300">
-                  Forum
+              </motion.li>
+              <motion.li variants={itemVariants}>
+                <Link
+                  to="/daily"
+                  className={`flex items-center gap-2 transition-colors duration-300 font-medium ${
+                    location.pathname === "/daily"
+                      ? "text-[#50b7f7] dark:text-[#0be084] font-semibold"
+                      : "text-[#01130c] dark:text-[#ecfef7] hover:text-[#50b7f7] dark:hover:text-[#086faf]"
+                  }`}
+                >
+                  <Users size={18} /> Forum
                 </Link>
-              </li>
-              <li>
-                <Link to="/contact" className="text-[#01130c] hover:text-[#50b7f7] transition-colors duration-300">
-                  Contact
+              </motion.li>
+              <motion.li variants={itemVariants}>
+                <Link
+                  to="/contact"
+                  className={`flex items-center gap-2 transition-colors duration-300 font-medium ${
+                    location.pathname === "/contact"
+                      ? "text-[#50b7f7] dark:text-[#0be084] font-semibold"
+                      : "text-[#01130c] dark:text-[#ecfef7] hover:text-[#50b7f7] dark:hover:text-[#086faf]"
+                  }`}
+                >
+                  <Headset size={18} /> Contact
                 </Link>
-              </li>
+              </motion.li>
             </ul>
-          </div>
+          </motion.div>
 
           {/* Features Links */}
-          <div className="flex flex-col items-center md:items-start">
-            <h3 className="text-xl font-semibold mb-6 text-[#01130c] relative">
+          <motion.div
+            variants={itemVariants}
+            className="flex flex-col items-center md:items-start"
+          >
+            <h3 className="text-xl font-semibold mb-6 text-[#01130c] dark:text-[#ecfef7] relative">
               <span className="relative z-10">Fitur Kesehatan</span>
-              <span className="absolute bottom-0 left-0 w-full h-2 bg-[#1ff498] opacity-40 z-0"></span>
+              <span className="absolute bottom-0 left-0 w-full h-2 bg-[#1ff498] dark:bg-[#0be084] opacity-40 z-0"></span>
             </h3>
             <ul className="space-y-3 text-center md:text-left">
-              <li>
-                <Link to="/features/physical-health" className="text-[#01130c] hover:text-[#50b7f7] transition-colors duration-300">
-                  Physical Health
+              <motion.li variants={itemVariants}>
+                <Link
+                  to="/features/physical-health"
+                  className={`flex items-center gap-2 transition-colors duration-300 font-medium ${
+                    location.pathname === "/features/physical-health"
+                      ? "text-[#50b7f7] dark:text-[#0be084] font-semibold"
+                      : "text-[#01130c] dark:text-[#ecfef7] hover:text-[#50b7f7] dark:hover:text-[#086faf]"
+                  }`}
+                >
+                  <HeartPulse size={18} /> Physical Health
                 </Link>
-              </li>
-              <li>
-                <Link to="/features/mental-health-emotions" className="text-[#01130c] hover:text-[#50b7f7] transition-colors duration-300">
-                  Mental Health & Emotions
+              </motion.li>
+              <motion.li variants={itemVariants}>
+                <Link
+                  to="/features/mental-health-emotions"
+                  className={`flex items-center gap-2 transition-colors duration-300 font-medium ${
+                    location.pathname === "/features/mental-health-emotions"
+                      ? "text-[#50b7f7] dark:text-[#0be084] font-semibold"
+                      : "text-[#01130c] dark:text-[#ecfef7] hover:text-[#50b7f7] dark:hover:text-[#086faf]"
+                  }`}
+                >
+                  <Brain size={18} /> Mental Health
                 </Link>
-              </li>
-              <li>
-                <Link to="/features/environmental-health" className="text-[#01130c] hover:text-[#50b7f7] transition-colors duration-300">
-                  Environmental Health
+              </motion.li>
+              <motion.li variants={itemVariants}>
+                <Link
+                  to="/features/environmental-health"
+                  className={`flex items-center gap-2 transition-colors duration-300 font-medium ${
+                    location.pathname === "/features/environmental-health"
+                      ? "text-[#50b7f7] dark:text-[#0be084] font-semibold"
+                      : "text-[#01130c] dark:text-[#ecfef7] hover:text-[#50b7f7] dark:hover:text-[#086faf]"
+                  }`}
+                >
+                  <Leaf size={18} /> Environmental
                 </Link>
-              </li>
-              <li>
-                <Link to="/features/social-connections" className="text-[#01130c] hover:text-[#50b7f7] transition-colors duration-300">
-                  Social Connections
+              </motion.li>
+              <motion.li variants={itemVariants}>
+                <Link
+                  to="/features/social-connections"
+                  className={`flex items-center gap-2 transition-colors duration-300 font-medium ${
+                    location.pathname === "/features/social-connections"
+                      ? "text-[#50b7f7] dark:text-[#0be084] font-semibold"
+                      : "text-[#01130c] dark:text-[#ecfef7] hover:text-[#50b7f7] dark:hover:text-[#086faf]"
+                  }`}
+                >
+                  <Handshake size={18} /> Social
                 </Link>
-              </li>
+              </motion.li>
             </ul>
-          </div>
+          </motion.div>
 
           {/* Additional Links */}
-          <div className="flex flex-col items-center md:items-start">
-            <h3 className="text-xl font-semibold mb-6 text-[#01130c] relative">
+          <motion.div
+            variants={itemVariants}
+            className="flex flex-col items-center md:items-start"
+          >
+            <h3 className="text-xl font-semibold mb-6 text-[#01130c] dark:text-[#ecfef7] relative">
               <span className="relative z-10">Kesejahteraan</span>
-              <span className="absolute bottom-0 left-0 w-full h-2 bg-[#1ff498] opacity-40 z-0"></span>
+              <span className="absolute bottom-0 left-0 w-full h-2 bg-[#1ff498] dark:bg-[#0be084] opacity-40 z-0"></span>
             </h3>
             <ul className="space-y-3 text-center md:text-left">
-              <li>
-                <Link to="/about/financial-occupational-wellbeing" className="text-[#01130c] hover:text-[#50b7f7] transition-colors duration-300">
-                  Financial & Occupational Wellbeing
+              <motion.li variants={itemVariants}>
+                <Link
+                  to="/features/financial-occupational-wellbeing"
+                  className={`flex items-center gap-2 transition-colors duration-300 font-medium ${
+                    location.pathname === "/features/financial-occupational-wellbeing"
+                      ? "text-[#50b7f7] dark:text-[#0be084] font-semibold"
+                      : "text-[#01130c] dark:text-[#ecfef7] hover:text-[#50b7f7] dark:hover:text-[#086faf]"
+                  }`}
+                >
+                  <ChartLine size={18} /> Financial Wellbeing
                 </Link>
-              </li>
-              <li className="flex justify-center md:justify-start space-x-4 pt-4">
-                <a href="#" aria-label="Facebook" className="text-[#72e4f8] hover:text-[#1ff498] transition-colors duration-300">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
-                  </svg>
-                </a>
-                <a href="#" aria-label="Twitter" className="text-[#72e4f8] hover:text-[#1ff498] transition-colors duration-300">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path>
-                  </svg>
-                </a>
-              </li>
+              </motion.li>
+              <motion.li
+                variants={itemVariants}
+                className="flex justify-center md:justify-start space-x-4 pt-4"
+              >
+                <motion.a
+                  href="#"
+                  aria-label="Facebook"
+                  whileHover={{ scale: 1.1 }}
+                  className="text-[#72e4f8] dark:text-[#07798d] hover:text-[#1ff498] dark:hover:text-[#0be084] transition-colors duration-300"
+                >
+                  <Facebook size={20} />
+                </motion.a>
+                <motion.a
+                  href="#"
+                  aria-label="Twitter"
+                  whileHover={{ scale: 1.1 }}
+                  className="text-[#72e4f8] dark:text-[#07798d] hover:text-[#1ff498] dark:hover:text-[#0be084] transition-colors duration-300"
+                >
+                  <Twitter size={20} />
+                </motion.a>
+              </motion.li>
             </ul>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* Copyright */}
-        <div className="mt-12 pt-6 border-t border-[#72e4f8] opacity-30">
-          <p className="text-center text-[#01130c] opacity-70">
+        <motion.div
+          variants={itemVariants}
+          className="mt-12 pt-6 border-t border-[#72e4f8] dark:border-[#07798d] opacity-30 dark:opacity-50"
+        >
+          <p className="text-center text-[#01130c] dark:text-[#ecfef7] opacity-70 dark:opacity-80">
             © {new Date().getFullYear()} Pillar Sehat. All rights reserved.
           </p>
-        </div>
+        </motion.div>
       </div>
     </footer>
   );

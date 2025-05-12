@@ -169,29 +169,29 @@ const Home = () => {
 
   const testimoniData = [
     {
-      image: "https://i.pravatar.cc/150?img=32",
+      image: "https://res.cloudinary.com/dxbkwpm3i/image/upload/v1740908252/WhatsApp_Image_2025-03-02_at_16.35.11_f8a5e4ec_dqk9mc.jpg",
       nama: "Ikhsan Rasyid Rabbani",
       sekolah: "SMKN 69 Jakarta",
       kesan:
         "Website ini sangat membantu saya memahami materi dengan lebih mudah.",
     },
     {
-      image: "https://i.pravatar.cc/150?img=45",
-      nama: "Aulia",
-      sekolah: "SMKN 1 Bandung",
+      image: "https://res.cloudinary.com/dxbkwpm3i/image/upload/v1740908252/WhatsApp_Image_2025-03-02_at_16.35.11_f8a5e4ec_dqk9mc.jpg",
+      nama: "Ikhsan Rasyid Rabbani",
+      sekolah: "SMKN 69 Jakarta",
       kesan: "Desainnya keren dan navigasinya gampang banget!",
     },
     {
-      image: "https://i.pravatar.cc/150?img=12",
-      nama: "Rizky",
-      sekolah: "SMKN 2 Bekasi",
+      image: "https://res.cloudinary.com/dxbkwpm3i/image/upload/v1740908252/WhatsApp_Image_2025-03-02_at_16.35.11_f8a5e4ec_dqk9mc.jpg",
+      nama: "Ikhsan Rasyid Rabbani",
+      sekolah: "SMKN 69 Jakarta",
       kesan:
         "Sangat recommended untuk teman-teman yang mau belajar lebih efektif.",
     },
     {
-      image: "https://i.pravatar.cc/150?img=24",
-      nama: "Salsabila",
-      sekolah: "SMKN 8 Jakarta",
+      image: "https://res.cloudinary.com/dxbkwpm3i/image/upload/v1740908252/WhatsApp_Image_2025-03-02_at_16.35.11_f8a5e4ec_dqk9mc.jpg",
+      nama: "Ikhsan Rasyid Rabbani",
+      sekolah: "SMKN 69 Jakarta",
       kesan: "Fitur-fiturnya lengkap dan tampilannya enak dilihat.",
     },
   ];

@@ -93,11 +93,12 @@ const Navbar = () => {
           {/* Left Side (Logo) */}
           <motion.a
             href="/"
+            draggable="false"
             className="flex items-center"
             whileHover={{ opacity: 0.8 }}
             whileTap={{ scale: 0.98 }}
           >
-            <img src={logo} alt="Logo" className="h-18" />
+            <img src={logo} alt="Logo" draggable="false" onContextMenu={(e) => e.preventDefault()} className="h-18" />
           </motion.a>
 
           {/* Center (Navigation + Search) */}
@@ -156,10 +157,10 @@ const Navbar = () => {
             </div>
 
             <a
-              href="https://github.com/your-username/your-repo"
+              href="https://github.com/Adistiaa/pilar-sehat.id"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="View on GitHub"
+              aria-label="Lihat di GitHub"
               className="inline-block p-1"
             >
               <Github className="w-6 h-6 text-[#01130c] dark:text-[#ecfef7] hover:text-[#50b7f7] dark:hover:text-[#0be084] transition-colors" />
@@ -183,6 +184,15 @@ const Navbar = () => {
 
           {/* Right Side (Mobile Menu Button) */}
           <div className="flex items-center space-x-2 md:hidden">
+            <a
+              href="https://github.com/Adistiaa/pilar-sehat.id"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Lihat di GitHub"
+              className="inline-block p-1"
+            >
+              <Github className="w-6 h-6 text-[#01130c] dark:text-[#ecfef7] hover:text-[#50b7f7] dark:hover:text-[#0be084] transition-colors" />
+            </a>
             {/* Dark Mode (Mobile) */}
             <div className="relative">
               <motion.button

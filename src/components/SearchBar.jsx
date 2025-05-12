@@ -53,11 +53,10 @@ export default function SearchBar({ isFocused, setIsFocused }) {
     found.forEach((textNode) => {
       const span = document.createElement("span");
       span.innerHTML = textNode.nodeValue.replace(regex, (match) => {
-        return `<mark class="bg-[#50b7f7]">${match}</mark>`;
+        return `<mark class="bg-[#50b7f7] dark:bg-[#0be084] text-white dark:text-[#010907]">${match}</mark>`;
       });
       textNode.parentNode.replaceChild(span, textNode);
 
-      // Setelah diubah, cari mark baru
       span.querySelectorAll("mark").forEach((m) => newMatches.push(m));
     });
 
@@ -113,53 +112,52 @@ export default function SearchBar({ isFocused, setIsFocused }) {
 
   return (
     <motion.div
-  className="relative flex items-center rounded-lg bg-gray-100 hover:bg-gray-200 transition-all px-4 py-2 w-full max-w-md border border-gray-300"
-  initial={{ opacity: 0, y: 5 }}
-  animate={{ opacity: 1, y: 0 }}
-  exit={{ opacity: 0, y: 5 }}
-  style={{ height: "40px" }} // Fixed height
->
-  <Search className="w-5 h-5 text-gray-500 flex-shrink-0" />
-  <input
-    ref={inputRef}
-    type="text"
-    placeholder="Search (Ctrl+K)"
-    value={searchTerm}
-    onChange={handleChange}
-    className="bg-transparent outline-none text-sm text-gray-700 placeholder-gray-500 w-full px-2"
-    onFocus={() => setIsFocused(true)}
-    onBlur={() => setIsFocused(false)}
-    style={{ height: "100%" }} // Match parent height
-  />
-  {searchTerm && (
-    <div className="flex items-center space-x-1 ml-2">
-      <button
-        onClick={goToPrev}
-        className="p-1 rounded hover:bg-gray-300 transition-colors flex items-center justify-center"
-        style={{ width: "24px", height: "24px" }}
-      >
-        <ChevronLeft className="w-4 h-4 text-gray-600" />
-      </button>
-      <span className="text-xs text-gray-600 select-none min-w-[40px] text-center">
-        {matches.length > 0 ? `${currentIndex + 1}/${matches.length}` : "0/0"}
-      </span>
-      <button
-        onClick={goToNext}
-        className="p-1 rounded hover:bg-gray-300 transition-colors flex items-center justify-center"
-        style={{ width: "24px", height: "24px" }}
-      >
-        <ChevronRight className="w-4 h-4 text-gray-600" />
-      </button>
-      <button
-        onClick={handleClear}
-        className="p-1 rounded hover:bg-gray-300 transition-colors flex items-center justify-center"
-        style={{ width: "24px", height: "24px" }}
-      >
-        <X className="w-4 h-4 text-gray-600" />
-      </button>
-    </div>
-  )}
-</motion.div>
-
+      className="relative flex items-center rounded-lg bg-gray-100 dark:bg-[#010907]/80 hover:bg-gray-200 dark:hover:bg-[#010907] transition-all px-4 py-2 w-full max-w-md border border-gray-300"
+      initial={{ opacity: 0, y: 5 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 5 }}
+      style={{ height: "40px" }}
+    >
+      <Search className="w-5 h-5 text-gray-500 flex-shrink-0" />
+      <input
+        ref={inputRef}
+        type="text"
+        placeholder="Search (Ctrl+K)"
+        value={searchTerm}
+        onChange={handleChange}
+        className="bg-transparent outline-none text-sm text-gray-700 dark:text-[#ecfef7] placeholder-gray-500 w-full px-2"
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
+        style={{ height: "100%" }}
+      />
+      {searchTerm && (
+        <div className="flex items-center space-x-1 ml-2">
+          <button
+            onClick={goToPrev}
+            className="p-1 rounded hover:bg-gray-300 dark:hover:bg-[#0be084]/10 transition-colors flex items-center justify-center"
+            style={{ width: "24px", height: "24px" }}
+          >
+            <ChevronLeft className="w-4 h-4 text-gray-600 dark:text-[#0be084]" />
+          </button>
+          <span className="text-xs text-gray-600 select-none min-w-[40px] text-center">
+            {matches.length > 0 ? `${currentIndex + 1}/${matches.length}` : "0/0"}
+          </span>
+          <button
+            onClick={goToNext}
+            className="p-1 rounded hover:bg-gray-300 dark:hover:bg-[#0be084]/10 transition-colors flex items-center justify-center"
+            style={{ width: "24px", height: "24px" }}
+          >
+            <ChevronRight className="w-4 h-4 text-gray-600 dark:text-[#0be084]" />
+          </button>
+          <button
+            onClick={handleClear}
+            className="p-1 rounded hover:bg-gray-300 dark:hover:bg-[#0be084]/10 transition-colors flex items-center justify-center"
+            style={{ width: "24px", height: "24px" }}
+          >
+            <X className="w-4 h-4 text-gray-600 dark:text-[#0be084]" />
+          </button>
+        </div>
+      )}
+    </motion.div>
   );
 }

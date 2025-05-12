@@ -20,7 +20,7 @@ import {
 import { Link } from "react-router-dom";
 import useScrollAnimations from "../components/AnimasiScroll";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Pagination } from "swiper/modules";
+import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import "swiper/css"; // Import style Swiper
 import "swiper/css/autoplay";
 import "swiper/css/pagination";
@@ -973,13 +973,13 @@ const Home = () => {
             </motion.div>
             <motion.h2
               variants={itemVariants}
-              className="text-3xl md:text-4xl font-bold mb-4 text-[#01130c] dark:text-[#ecfef7]"
+              className="text-3xl font-bold mb-4"
             >
               Apa Kata Mereka?
             </motion.h2>
             <motion.p
               variants={itemVariants}
-              className="text-[#01130c]/70 dark:text-[#ecfef7]/70 max-w-2xl mx-auto text-base md:text-lg"
+              className="text-[#01130c]/70 dark:text-[#ecfef7]/70 max-w-2xl mx-auto"
             >
               Testimoni dari pengguna kami yang telah merasakan manfaat dari
               website ini.
@@ -988,49 +988,82 @@ const Home = () => {
 
           {/* Swiper Testimoni */}
           <Swiper
-            modules={[Autoplay, Pagination]}
-            slidesPerView={1}
-            spaceBetween={20}
-            loop={true}
-            autoplay={{
-              delay: 3000,
-              disableOnInteraction: false,
-            }}
-            pagination={{
-              clickable: true,
-              dynamicBullets: true,
-            }}
-            breakpoints={{
-              768: {
-                slidesPerView: 3,
-              },
-            }}
-            className="testimoni-swiper"
+      modules={[Autoplay, Pagination]}
+      slidesPerView={1}
+      spaceBetween={20}
+      loop={true}
+      autoplay={{
+        delay: 3000,
+        disableOnInteraction: false,
+      }}
+      pagination={{
+        clickable: true,
+        dynamicBullets: true,
+        el: '.testimoni-pagination',
+      }}
+      breakpoints={{
+        640: {
+          slidesPerView: 2,
+        },
+        1024: {
+          slidesPerView: 3,
+        },
+      }}
+      className="testimoni-swiper pb-12"
+    >
+      {testimoniData.map((testi, index) => (
+        <SwiperSlide key={index}>
+          <motion.div
+            variants={itemVariants}
+            className="bg-[#f6fefc] dark:bg-[#010907] rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col items-center text-center h-full border border-[#1ff498]/20 dark:border-[#0be084]/20 relative overflow-hidden"
           >
-            {testimoniData.map((testi, index) => (
-              <SwiperSlide key={index}>
-                <motion.div
-                  variants={itemVariants}
-                  className="bg-[#f6fefc] dark:bg-[#010907] rounded-2xl p-6 shadow-md flex flex-col items-center text-center h-full"
-                >
-                  <img
-                    src={testi.image}
-                    alt={testi.nama}
-                    className="w-20 h-20 object-cover rounded-full mb-4 border-2 border-[#1ff498] dark:border-[#0be084]"
-                  />
-                  <h4 className="text-lg font-semibold text-[#01130c] dark:text-[#ecfef7] mb-1">
-                    {testi.nama}
-                  </h4>
-                  <p className="text-sm text-[#01130c]/60 dark:text-[#ecfef7]/60 mb-4">
-                    {testi.sekolah}
-                  </p>
-                  <p className="text-sm text-[#01130c]/80 dark:text-[#ecfef7]/80 italic">
-                    "{testi.kesan}"
-                  </p>
-                </motion.div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
+            {/* Decorative elements */}
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#1ff498] to-[#0be084]"></div>
+            <div className="absolute -bottom-4 -right-4 w-24 h-24 rounded-full bg-[#1ff498]/10 dark:bg-[#0be084]/10"></div>
+            
+            {/* Protected Image */}
+            <div className="relative w-20 h-20 mb-4 group">
+              <div 
+                className="w-full h-full rounded-full border-2 border-[#1ff498] dark:border-[#0be084] bg-gray-100 dark:bg-gray-800 overflow-hidden pointer-events-none select-none"
+                style={{
+                  backgroundImage: `url(${testi.image})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  userSelect: 'none',
+                  WebkitUserSelect: 'none',
+                  MozUserSelect: 'none',
+                  msUserSelect: 'none'
+                }}
+                onContextMenu={(e) => e.preventDefault()}
+                draggable="false"
+                unselectable="on"
+              />
+              <div className="absolute inset-0 rounded-full border-2 border-transparent group-hover:border-[#1ff498] dark:group-hover:border-[#0be084] transition-all duration-300"></div>
+            </div>
+            
+            <h4 className="text-lg font-semibold text-[#01130c] dark:text-[#ecfef7] mb-1">
+              {testi.nama}
+            </h4>
+            <p className="text-sm text-[#01130c]/60 dark:text-[#ecfef7]/60 mb-4">
+              {testi.sekolah}
+            </p>
+            <p className="text-sm text-[#01130c]/80 dark:text-[#ecfef7]/80 italic relative z-10">
+              "{testi.kesan}"
+            </p>
+            
+            {/* Quote icon */}
+            <svg 
+              className="absolute bottom-2 right-4 text-[#1ff498]/20 dark:text-[#0be084]/20 w-12 h-12" 
+              fill="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+            </svg> 
+          </motion.div>
+        </SwiperSlide>
+      ))}
+    </Swiper>
+
         </motion.section>
         {/* Enhanced Call to Action */}
         <motion.section

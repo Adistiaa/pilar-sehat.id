@@ -166,6 +166,7 @@ const Navbar = () => {
               <Github className="w-6 h-6 text-[#01130c] dark:text-[#ecfef7] hover:text-[#50b7f7] dark:hover:text-[#0be084] transition-colors" />
             </a>
 
+            {/* Dark Mode (Desktop) */}
             <div className="relative">
               <motion.button
                 onClick={handleToggle}

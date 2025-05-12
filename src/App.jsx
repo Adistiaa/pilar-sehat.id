@@ -15,6 +15,7 @@ import AIChatWidget from "./components/AIChatWidget.jsx";
 import Footer from "./components/Footer.jsx";
 import Home from "./pages/Home.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
+import KebijakanPrivPage from "./pages/KebijakanPrivPage.jsx";
 
 function App() {
   const URL = import.meta.env.VITE_URL;
@@ -33,6 +34,7 @@ function App() {
             <Route path="/about" element={<AboutPage />} />
             <Route path="/daily" element={<DailyPage />} />
             <Route path="/contact" element={<ContactPage />} />
+            <Route path="/kebijakan-privasi" element={<KebijakanPrivPage />} />
 
             {/* Features Submenu Pages */}
             <Route path="/features/physical-health" element={<PhysicalHealth />} />

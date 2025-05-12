@@ -24,7 +24,6 @@ import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import "swiper/css"; // Import style Swiper
 import "swiper/css/autoplay";
 import "swiper/css/pagination";
-import BackToTop from "../components/BackToTop";
 
 const Home = () => {
   const { refs, controls, isVisible, sectionVariants, isHeroInView } =
@@ -1110,9 +1109,6 @@ const Home = () => {
             </motion.div>
           </div>
         </motion.section>
-        
-        {/* Back to Top Button - appears when scrolling */}
-        <BackToTop />
 
         {/* Notes:Added dark: classes for all className attributes that involve
       colors, ensuring they map to the dark mode palette.Changed SVG fill

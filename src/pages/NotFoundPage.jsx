@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const NotFoundPage = () => {
   return (
-    <div className="relative min-h-screen w-full overflow-hidden bg-gradient-to-br from-[#f6fefc] to-[#e0f7f5] dark:from-[#010907] dark:to-[#01130c] flex flex-col items-center justify-center px-4 py-12">
+    <div className="relative min-h-screen w-full overflow-hidden bg-gradient-to-br from-[#f6fefc] to-[#e0f7f5] dark:from-[#010907] dark:to-[#01130c] flex flex-col items-center justify-center px-4 py-12" id="content">
       {/* Enhanced Decorative Animated Shapes - More visible in light mode */}
       <div className="absolute inset-0 w-full h-full overflow-hidden opacity-90 dark:opacity-60">
         {/* Floating Circles */}

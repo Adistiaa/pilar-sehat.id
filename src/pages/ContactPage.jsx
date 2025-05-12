@@ -12,7 +12,6 @@ import {
 import { Link } from "react-router-dom";
 import DayNightGlobe from "../components/DayNightGlobe";
 import emailjs from "@emailjs/browser";
-import BackToTop from "../components/BackToTop";
 import useScrollAnimations from "../components/AnimasiScroll";
 
 const ContactPage = () => {
@@ -134,7 +133,7 @@ const ContactPage = () => {
     useScrollAnimations();
 
   return (
-      <div className="bg-[#f6fefc] dark:bg-[#010907] text-[#01130c] dark:text-[#ecfef7] min-h-screen relative">
+      <div className="bg-[#f6fefc] dark:bg-[#010907] text-[#01130c] dark:text-[#ecfef7] min-h-screen relative" id="content">
         {/* Header Section */}
         <motion.section
           initial="hidden"
@@ -466,7 +465,6 @@ const ContactPage = () => {
             />
           </motion.svg>
         </div>
-        <BackToTop />
       </div>
   );
 };

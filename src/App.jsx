@@ -16,6 +16,7 @@ import Footer from "./components/Footer.jsx";
 import Home from "./pages/Home.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
 import KebijakanPrivPage from "./pages/KebijakanPrivPage.jsx";
+import BackToTop from "./components/BackToTop.jsx";
 
 function App() {
   const URL = import.meta.env.VITE_URL;
@@ -26,6 +27,7 @@ function App() {
         <Navbar />
         {/* <AIChatWidget apiKey={URL} /> */}
         <ScrollToTop />
+        <BackToTop />
         <main className="flex-grow">
           <Routes>
             {/* Main Pages */}
@@ -47,7 +49,6 @@ function App() {
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </main>
-
         <Footer />
       </div>
     </Router>

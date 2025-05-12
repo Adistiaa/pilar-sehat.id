@@ -25,7 +25,6 @@ import {
   Info,
 } from "lucide-react";
 import useScrollAnimations from "../components/AnimasiScroll";
-import BackToTop from "../components/BackToTop";
 
 const AboutPage = () => {
   // Animation variants defined here (not in hooks)
@@ -795,7 +794,6 @@ const AboutPage = () => {
           />
         </motion.svg>
       </div>
-      <BackToTop />
     </div>
   );
 };

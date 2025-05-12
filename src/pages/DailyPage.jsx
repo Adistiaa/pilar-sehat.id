@@ -10,9 +10,9 @@ import {
   Globe,
   Tag
 } from "lucide-react";
+import { motion } from "framer-motion";
 import * as _ from 'lodash';
 import useScrollAnimations from "../components/AnimasiScroll";
-import BackToTop from "../components/BackToTop";
 
 const NewsCard = ({ newsItem, onClick }) => {
   const formatDate = (dateString) => {
@@ -31,7 +31,7 @@ const NewsCard = ({ newsItem, onClick }) => {
   return (
     <div 
       className="bg-white dark:bg-[#0a1a16] rounded-xl overflow-hidden border-2 border-[#72e4f8] dark:border-[#07798d] hover:border-[#1ff498] dark:hover:border-[#0be084] transition-all hover:shadow-lg cursor-pointer group"
-      onClick={onClick}
+      onClick={onClick} id="content"
     >
       <div className="p-6">
         <div className="flex justify-between items-center mb-2">
@@ -198,33 +198,33 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   );
 };
 
-const FooterWave = () => {
-  return (
-    <div className="relative h-32 w-full overflow-hidden">
-      <svg
-        viewBox="0 0 1200 120"
-        preserveAspectRatio="none"
-        className="absolute top-0 w-full h-full"
-      >
-        <path
-          fill="#1ff498"
-          fillOpacity="0.1"
-          d="M0,120V73.71c47.79-22.2,103.59-32.17,158-28,70.36,5.37,136.33,33.31,206.8,37.5C438.64,87.57,512.34,66.33,583,47.95c69.27-18,138.3-24.88,209.4-13.08,36.15,6,69.85,17.84,104.45,29.34C989.49,95,1113,134.29,1200,67.53V120Z"
-        />
-        <path
-          fill="#1ff498"
-          fillOpacity="0.2"
-          d="M0,120V104.19C13,83.08,27.64,63.14,47.69,47.95,99.41,8.73,165,9,224.58,28.42c31.15,10.15,60.09,26.07,89.67,39.8,40.92,19,84.73,46,130.83,49.67,36.26,2.85,70.9-9.42,98.6-31.56,31.77-25.39,62.32-62,103.63-73,40.44-10.79,81.35,6.69,119.13,24.28s75.16,39,116.92,43.05c59.73,5.85,113.28-22.88,168.9-38.84,30.2-8.66,59-6.17,87.09,7.5,22.43,10.89,48,26.93,60.65,49.24V120Z"
-        />
-        <path
-          fill="#1ff498"
-          fillOpacity="0.3"
-          d="M0,120V114.37C149.93,61,314.09,48.68,475.83,77.43c43,7.64,84.23,20.12,127.61,26.46,59,8.63,112.48-12.24,165.56-35.4C827.93,42.78,886,24.76,951.2,30c86.53,7,172.46,45.71,248.8,84.81V120Z"
-        />
-      </svg>
-    </div>
-  );
-};
+// const FooterWave = () => {
+//   return (
+//     <div className="relative h-32 w-full overflow-hidden">
+//       <svg
+//         viewBox="0 0 1200 120"
+//         preserveAspectRatio="none"
+//         className="absolute top-0 w-full h-full"
+//       >
+//         <path
+//           fill="#1ff498"
+//           fillOpacity="0.1"
+//           d="M0,120V73.71c47.79-22.2,103.59-32.17,158-28,70.36,5.37,136.33,33.31,206.8,37.5C438.64,87.57,512.34,66.33,583,47.95c69.27-18,138.3-24.88,209.4-13.08,36.15,6,69.85,17.84,104.45,29.34C989.49,95,1113,134.29,1200,67.53V120Z"
+//         />
+//         <path
+//           fill="#1ff498"
+//           fillOpacity="0.2"
+//           d="M0,120V104.19C13,83.08,27.64,63.14,47.69,47.95,99.41,8.73,165,9,224.58,28.42c31.15,10.15,60.09,26.07,89.67,39.8,40.92,19,84.73,46,130.83,49.67,36.26,2.85,70.9-9.42,98.6-31.56,31.77-25.39,62.32-62,103.63-73,40.44-10.79,81.35,6.69,119.13,24.28s75.16,39,116.92,43.05c59.73,5.85,113.28-22.88,168.9-38.84,30.2-8.66,59-6.17,87.09,7.5,22.43,10.89,48,26.93,60.65,49.24V120Z"
+//         />
+//         <path
+//           fill="#1ff498"
+//           fillOpacity="0.3"
+//           d="M0,120V114.37C149.93,61,314.09,48.68,475.83,77.43c43,7.64,84.23,20.12,127.61,26.46,59,8.63,112.48-12.24,165.56-35.4C827.93,42.78,886,24.76,951.2,30c86.53,7,172.46,45.71,248.8,84.81V120Z"
+//         />
+//       </svg>
+//     </div>
+//   );
+// };
 
 const LoadingState = () => (
   <div className="flex flex-col justify-center items-center py-20">
@@ -529,12 +529,73 @@ const DailyPage = () => {
       {isModalOpen && selectedNews && (
         <NewsModal newsItem={selectedNews} onClose={closeModal} />
       )}
-
-      {/* Back to top button - using imported component */}
-      <BackToTop />
       
+      {/* Footer Wave
+      <FooterWave /> */}
       {/* Footer Wave */}
-      <FooterWave />
+            <div className="relative h-32 w-full overflow-hidden">
+              <motion.svg
+                viewBox="0 0 1200 120"
+                preserveAspectRatio="none"
+                className="absolute top-0 w-full h-full"
+                initial={{ opacity: 0 }}
+                animate={{
+                  opacity: 1,
+                  transition: { duration: 1, delay: 0.5 },
+                }}
+              >
+                <motion.path
+                  fill="#1ff498"
+                  fillOpacity="0.1"
+                  d="M0,120V73.71c47.79-22.2,103.59-32.17,158-28,70.36,5.37,136.33,33.31,206.8,37.5C438.64,87.57,512.34,66.33,583,47.95c69.27-18,138.3-24.88,209.4-13.08,36.15,6,69.85,17.84,104.45,29.34C989.49,95,1113,134.29,1200,67.53V120Z"
+                  initial={{ pathLength: 0, pathOffset: 1 }}
+                  animate={{
+                    pathLength: 1,
+                    pathOffset: 0,
+                    transition: {
+                      duration: 3,
+                      ease: "linear",
+                      repeat: Infinity,
+                      repeatType: "loop",
+                    },
+                  }}
+                />
+                <motion.path
+                  fill="#1ff498"
+                  fillOpacity="0.2"
+                  d="M0,120V104.19C13,83.08,27.64,63.14,47.69,47.95,99.41,8.73,165,9,224.58,28.42c31.15,10.15,60.09,26.07,89.67,39.8,40.92,19,84.73,46,130.83,49.67,36.26,2.85,70.9-9.42,98.6-31.56,31.77-25.39,62.32-62,103.63-73,40.44-10.79,81.35,6.69,119.13,24.28s75.16,39,116.92,43.05c59.73,5.85,113.28-22.88,168.9-38.84,30.2-8.66,59-6.17,87.09,7.5,22.43,10.89,48,26.93,60.65,49.24V120Z"
+                  initial={{ pathLength: 0, pathOffset: 1 }}
+                  animate={{
+                    pathLength: 1,
+                    pathOffset: 0,
+                    transition: {
+                      duration: 3.5,
+                      ease: "linear",
+                      repeat: Infinity,
+                      repeatType: "loop",
+                      delay: 0.2,
+                    },
+                  }}
+                />
+                <motion.path
+                  fill="#1ff498"
+                  fillOpacity="0.3"
+                  d="M0,120V114.37C149.93,61,314.09,48.68,475.83,77.43c43,7.64,84.23,20.12,127.61,26.46,59,8.63,112.48-12.24,165.56-35.4C827.93,42.78,886,24.76,951.2,30c86.53,7,172.46,45.71,248.8,84.81V120Z"
+                  initial={{ pathLength: 0, pathOffset: 1 }}
+                  animate={{
+                    pathLength: 1,
+                    pathOffset: 0,
+                    transition: {
+                      duration: 4,
+                      ease: "linear",
+                      repeat: Infinity,
+                      repeatType: "loop",
+                      delay: 0.4,
+                    },
+                  }}
+                />
+              </motion.svg>
+            </div>
     </div>
   );
 };

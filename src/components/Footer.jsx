@@ -13,6 +13,7 @@ import {
   Headset,
   Handshake,
   ChartLine,
+  Newspaper
 } from "lucide-react";
 import logo from "../assets/logo.svg";
 import { useLocation } from "react-router-dom";
@@ -119,7 +120,7 @@ const Footer = () => {
                       : "text-[#01130c] dark:text-[#ecfef7] hover:text-[#50b7f7] dark:hover:text-[#086faf]"
                   }`}
                 >
-                  <Users size={18} /> Forum
+                  <Newspaper size={18} /> Daily News
                 </Link>
               </motion.li>
               <motion.li variants={itemVariants}>

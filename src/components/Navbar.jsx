@@ -56,7 +56,7 @@ const Navbar = () => {
         },
       ],
     },
-    { name: "Daily", path: "/daily" },
+    { name: "Daily News", path: "/daily" },
     { name: "Contact", path: "/contact" },
   ];
 

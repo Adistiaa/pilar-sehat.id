@@ -216,7 +216,7 @@ const AboutPage = () => {
   return (
     <div
       className="bg-[#f6fefc] dark:bg-[#010907] text-[#01130c] dark:text-[#ecfef7]"
-      ref={refs.container}
+      ref={refs.container} id="content"
     >
       {/* Hero Section */}
       <motion.section

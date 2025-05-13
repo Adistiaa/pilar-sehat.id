@@ -1,0 +1,361 @@
+{
+  "questions": [
+    {
+      "id": 1,
+      "question": "Bagaimana perasaan Anda saat ini?",
+      "options": [
+        { "text": "Sangat bahagia", "points": { "ceria": 3, "tenang": 2, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Cukup baik", "points": { "ceria": 2, "tenang": 2, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Biasa saja", "points": { "ceria": 1, "tenang": 1, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Tidak terlalu baik", "points": { "ceria": 0, "tenang": 0, "marah": 1, "cemas": 1, "sedih": 2 } },
+        { "text": "Sangat buruk", "points": { "ceria": 0, "tenang": 0, "marah": 1, "cemas": 2, "sedih": 3 } }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "Seberapa sering Anda merasa khawatir atau cemas?",
+      "options": [
+        { "text": "Hampir tidak pernah", "points": { "ceria": 2, "tenang": 3, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Kadang-kadang", "points": { "ceria": 1, "tenang": 2, "marah": 0, "cemas": 1, "sedih": 0 } },
+        { "text": "Beberapa kali seminggu", "points": { "ceria": 0, "tenang": 1, "marah": 1, "cemas": 2, "sedih": 1 } },
+        { "text": "Hampir setiap hari", "points": { "ceria": 0, "tenang": 0, "marah": 1, "cemas": 3, "sedih": 1 } },
+        { "text": "Setiap saat", "points": { "ceria": 0, "tenang": 0, "marah": 2, "cemas": 4, "sedih": 2 } }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "Bagaimana pola tidur Anda belakangan ini?",
+      "options": [
+        { "text": "Sangat baik dan teratur", "points": { "ceria": 2, "tenang": 3, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Cukup baik", "points": { "ceria": 1, "tenang": 2, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Kadang baik, kadang buruk", "points": { "ceria": 1, "tenang": 1, "marah": 1, "cemas": 1, "sedih": 1 } },
+        { "text": "Sering sulit tidur", "points": { "ceria": 0, "tenang": 0, "marah": 1, "cemas": 2, "sedih": 1 } },
+        { "text": "Sangat buruk/hampir tidak bisa tidur", "points": { "ceria": 0, "tenang": 0, "marah": 2, "cemas": 3, "sedih": 3 } }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "Seberapa mudah Anda merasa kesal atau marah?",
+      "options": [
+        { "text": "Sangat sabar, hampir tidak pernah marah", "points": { "ceria": 1, "tenang": 3, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Cukup sabar", "points": { "ceria": 1, "tenang": 2, "marah": 1, "cemas": 0, "sedih": 0 } },
+        { "text": "Kadang-kadang mudah kesal", "points": { "ceria": 0, "tenang": 1, "marah": 2, "cemas": 1, "sedih": 0 } },
+        { "text": "Sering merasa kesal", "points": { "ceria": 0, "tenang": 0, "marah": 3, "cemas": 1, "sedih": 1 } },
+        { "text": "Hampir selalu kesal/marah", "points": { "ceria": 0, "tenang": 0, "marah": 4, "cemas": 2, "sedih": 1 } }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "Seberapa sering Anda merasa sedih atau patah semangat?",
+      "options": [
+        { "text": "Hampir tidak pernah", "points": { "ceria": 3, "tenang": 2, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Jarang", "points": { "ceria": 2, "tenang": 2, "marah": 0, "cemas": 0, "sedih": 1 } },
+        { "text": "Kadang-kadang", "points": { "ceria": 1, "tenang": 1, "marah": 0, "cemas": 1, "sedih": 2 } },
+        { "text": "Sering", "points": { "ceria": 0, "tenang": 0, "marah": 1, "cemas": 1, "sedih": 3 } },
+        { "text": "Hampir setiap hari", "points": { "ceria": 0, "tenang": 0, "marah": 1, "cemas": 2, "sedih": 4 } }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "Bagaimana kemampuan Anda dalam mengatasi stres sehari-hari?",
+      "options": [
+        { "text": "Sangat baik", "points": { "ceria": 2, "tenang": 3, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Cukup baik", "points": { "ceria": 1, "tenang": 2, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Biasa saja", "points": { "ceria": 1, "tenang": 1, "marah": 1, "cemas": 1, "sedih": 0 } },
+        { "text": "Agak sulit", "points": { "ceria": 0, "tenang": 0, "marah": 1, "cemas": 2, "sedih": 1 } },
+        { "text": "Sangat sulit", "points": { "ceria": 0, "tenang": 0, "marah": 2, "cemas": 3, "sedih": 2 } }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "Seberapa mudah Anda tertawa atau merasa bahagia?",
+      "options": [
+        { "text": "Sangat mudah", "points": { "ceria": 4, "tenang": 1, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Cukup mudah", "points": { "ceria": 3, "tenang": 1, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Biasa saja", "points": { "ceria": 2, "tenang": 1, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Agak sulit", "points": { "ceria": 1, "tenang": 0, "marah": 0, "cemas": 1, "sedih": 2 } },
+        { "text": "Sangat sulit", "points": { "ceria": 0, "tenang": 0, "marah": 1, "cemas": 1, "sedih": 3 } }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "Bagaimana hubungan Anda dengan orang lain saat ini?",
+      "options": [
+        { "text": "Sangat baik dan memuaskan", "points": { "ceria": 3, "tenang": 2, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Cukup baik", "points": { "ceria": 2, "tenang": 1, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Biasa saja", "points": { "ceria": 1, "tenang": 1, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Agak bermasalah", "points": { "ceria": 0, "tenang": 0, "marah": 1, "cemas": 1, "sedih": 1 } },
+        { "text": "Sangat bermasalah", "points": { "ceria": 0, "tenang": 0, "marah": 2, "cemas": 1, "sedih": 2 } }
+      ]
+    },
+    {
+      "id": 9,
+      "question": "Seberapa sering Anda merasa optimis tentang masa depan?",
+      "options": [
+        { "text": "Hampir selalu", "points": { "ceria": 3, "tenang": 2, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Sering", "points": { "ceria": 2, "tenang": 2, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Kadang-kadang", "points": { "ceria": 1, "tenang": 1, "marah": 0, "cemas": 1, "sedih": 1 } },
+        { "text": "Jarang", "points": { "ceria": 0, "tenang": 0, "marah": 1, "cemas": 2, "sedih": 2 } },
+        { "text": "Hampir tidak pernah", "points": { "ceria": 0, "tenang": 0, "marah": 1, "cemas": 2, "sedih": 3 } }
+      ]
+    },
+    {
+      "id": 10,
+      "question": "Seberapa puas Anda dengan hidup Anda secara keseluruhan?",
+      "options": [
+        { "text": "Sangat puas", "points": { "ceria": 3, "tenang": 3, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Cukup puas", "points": { "ceria": 2, "tenang": 2, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Biasa saja", "points": { "ceria": 1, "tenang": 1, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Tidak terlalu puas", "points": { "ceria": 0, "tenang": 0, "marah": 1, "cemas": 1, "sedih": 2 } },
+        { "text": "Sangat tidak puas", "points": { "ceria": 0, "tenang": 0, "marah": 2, "cemas": 2, "sedih": 3 } }
+      ]
+    },
+    {
+      "id": 11,
+      "question": "Bagaimana energi Anda dalam menjalani hari-hari?",
+      "options": [
+        { "text": "Sangat berenergi", "points": { "ceria": 3, "tenang": 1, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Cukup berenergi", "points": { "ceria": 2, "tenang": 1, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Biasa saja", "points": { "ceria": 1, "tenang": 1, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Sering merasa lelah", "points": { "ceria": 0, "tenang": 0, "marah": 1, "cemas": 1, "sedih": 2 } },
+        { "text": "Selalu kekurangan energi", "points": { "ceria": 0, "tenang": 0, "marah": 1, "cemas": 1, "sedih": 3 } }
+      ]
+    },
+    {
+      "id": 12,
+      "question": "Seberapa sering Anda merasa bersyukur?",
+      "options": [
+        { "text": "Hampir setiap hari", "points": { "ceria": 3, "tenang": 2, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Sering", "points": { "ceria": 2, "tenang": 2, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Kadang-kadang", "points": { "ceria": 1, "tenang": 1, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Jarang", "points": { "ceria": 0, "tenang": 0, "marah": 1, "cemas": 1, "sedih": 1 } },
+        { "text": "Hampir tidak pernah", "points": { "ceria": 0, "tenang": 0, "marah": 2, "cemas": 1, "sedih": 2 } }
+      ]
+    },
+    {
+      "id": 13,
+      "question": "Bagaimana kemampuan Anda dalam berkonsentrasi?",
+      "options": [
+        { "text": "Sangat baik", "points": { "ceria": 2, "tenang": 3, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Cukup baik", "points": { "ceria": 1, "tenang": 2, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Biasa saja", "points": { "ceria": 1, "tenang": 1, "marah": 0, "cemas": 1, "sedih": 0 } },
+        { "text": "Agak sulit fokus", "points": { "ceria": 0, "tenang": 0, "marah": 1, "cemas": 2, "sedih": 1 } },
+        { "text": "Sangat sulit berkonsentrasi", "points": { "ceria": 0, "tenang": 0, "marah": 2, "cemas": 3, "sedih": 2 } }
+      ]
+    },
+    {
+      "id": 14,
+      "question": "Seberapa sering Anda melakukan hal-hal yang membuat Anda bahagia?",
+      "options": [
+        { "text": "Hampir setiap hari", "points": { "ceria": 4, "tenang": 2, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Beberapa kali seminggu", "points": { "ceria": 3, "tenang": 1, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Sekali seminggu", "points": { "ceria": 2, "tenang": 1, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Jarang", "points": { "ceria": 1, "tenang": 0, "marah": 1, "cemas": 1, "sedih": 1 } },
+        { "text": "Hampir tidak pernah", "points": { "ceria": 0, "tenang": 0, "marah": 1, "cemas": 1, "sedih": 2 } }
+      ]
+    },
+    {
+      "id": 15,
+      "question": "Bagaimana perasaan Anda terhadap diri sendiri?",
+      "options": [
+        { "text": "Sangat positif", "points": { "ceria": 3, "tenang": 2, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Cukup positif", "points": { "ceria": 2, "tenang": 2, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Netral", "points": { "ceria": 1, "tenang": 1, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Agak negatif", "points": { "ceria": 0, "tenang": 0, "marah": 1, "cemas": 1, "sedih": 2 } },
+        { "text": "Sangat negatif", "points": { "ceria": 0, "tenang": 0, "marah": 2, "cemas": 2, "sedih": 3 } }
+      ]
+    },
+    {
+      "id": 16,
+      "question": "Seberapa sering Anda merasa tidak sabar?",
+      "options": [
+        { "text": "Hampir tidak pernah", "points": { "ceria": 1, "tenang": 3, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Jarang", "points": { "ceria": 1, "tenang": 2, "marah": 1, "cemas": 0, "sedih": 0 } },
+        { "text": "Kadang-kadang", "points": { "ceria": 0, "tenang": 1, "marah": 2, "cemas": 1, "sedih": 0 } },
+        { "text": "Sering", "points": { "ceria": 0, "tenang": 0, "marah": 3, "cemas": 1, "sedih": 0 } },
+        { "text": "Hampir selalu", "points": { "ceria": 0, "tenang": 0, "marah": 4, "cemas": 2, "sedih": 1 } }
+      ]
+    },
+    {
+      "id": 17,
+      "question": "Bagaimana nafsu makan Anda belakangan ini?",
+      "options": [
+        { "text": "Sangat baik", "points": { "ceria": 2, "tenang": 2, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Normal", "points": { "ceria": 1, "tenang": 2, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Kadang baik, kadang buruk", "points": { "ceria": 1, "tenang": 1, "marah": 0, "cemas": 1, "sedih": 1 } },
+        { "text": "Cenderung berkurang", "points": { "ceria": 0, "tenang": 0, "marah": 0, "cemas": 1, "sedih": 2 } },
+        { "text": "Terlalu berlebihan/sangat berkurang", "points": { "ceria": 0, "tenang": 0, "marah": 1, "cemas": 2, "sedih": 2 } }
+      ]
+    },
+    {
+      "id": 18,
+      "question": "Seberapa sering Anda merasa khawatir tentang masa depan?",
+      "options": [
+        { "text": "Hampir tidak pernah", "points": { "ceria": 2, "tenang": 3, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Jarang", "points": { "ceria": 1, "tenang": 2, "marah": 0, "cemas": 1, "sedih": 0 } },
+        { "text": "Kadang-kadang", "points": { "ceria": 1, "tenang": 1, "marah": 0, "cemas": 2, "sedih": 1 } },
+        { "text": "Sering", "points": { "ceria": 0, "tenang": 0, "marah": 1, "cemas": 3, "sedih": 1 } },
+        { "text": "Hampir setiap saat", "points": { "ceria": 0, "tenang": 0, "marah": 1, "cemas": 4, "sedih": 2 } }
+      ]
+    },
+    {
+      "id": 19,
+      "question": "Bagaimana kemampuan Anda untuk menikmati hal-hal kecil dalam hidup?",
+      "options": [
+        { "text": "Sangat baik", "points": { "ceria": 4, "tenang": 2, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Cukup baik", "points": { "ceria": 3, "tenang": 1, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Biasa saja", "points": { "ceria": 2, "tenang": 1, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Agak sulit", "points": { "ceria": 1, "tenang": 0, "marah": 0, "cemas": 1, "sedih": 2 } },
+        { "text": "Sangat sulit", "points": { "ceria": 0, "tenang": 0, "marah": 1, "cemas": 1, "sedih": 3 } }
+      ]
+    },
+    {
+      "id": 20,
+      "question": "Seberapa sering Anda merasa tidak berharga?",
+      "options": [
+        { "text": "Hampir tidak pernah", "points": { "ceria": 3, "tenang": 2, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Jarang", "points": { "ceria": 2, "tenang": 1, "marah": 0, "cemas": 0, "sedih": 1 } },
+        { "text": "Kadang-kadang", "points": { "ceria": 1, "tenang": 0, "marah": 1, "cemas": 1, "sedih": 2 } },
+        { "text": "Sering", "points": { "ceria": 0, "tenang": 0, "marah": 1, "cemas": 1, "sedih": 3 } },
+        { "text": "Hampir setiap saat", "points": { "ceria": 0, "tenang": 0, "marah": 2, "cemas": 2, "sedih": 4 } }
+      ]
+    },
+    {
+      "id": 21,
+      "question": "Bagaimana tingkat energi Anda untuk melakukan aktivitas sehari-hari?",
+      "options": [
+        { "text": "Sangat berenergi", "points": { "ceria": 3, "tenang": 2, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Cukup berenergi", "points": { "ceria": 2, "tenang": 1, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Biasa saja", "points": { "ceria": 1, "tenang": 1, "marah": 0, "cemas": 0, "sedih": 1 } },
+        { "text": "Sering merasa lelah", "points": { "ceria": 0, "tenang": 0, "marah": 1, "cemas": 1, "sedih": 2 } },
+        { "text": "Hampir selalu lelah", "points": { "ceria": 0, "tenang": 0, "marah": 1, "cemas": 2, "sedih": 3 } }
+      ]
+    },
+    {
+      "id": 22,
+      "question": "Seberapa sering Anda merasa frustrasi dengan situasi hidup Anda?",
+      "options": [
+        { "text": "Hampir tidak pernah", "points": { "ceria": 2, "tenang": 3, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Jarang", "points": { "ceria": 1, "tenang": 2, "marah": 1, "cemas": 0, "sedih": 0 } },
+        { "text": "Kadang-kadang", "points": { "ceria": 1, "tenang": 1, "marah": 2, "cemas": 1, "sedih": 1 } },
+        { "text": "Sering", "points": { "ceria": 0, "tenang": 0, "marah": 3, "cemas": 1, "sedih": 1 } },
+        { "text": "Hampir setiap hari", "points": { "ceria": 0, "tenang": 0, "marah": 4, "cemas": 2, "sedih": 2 } }
+      ]
+    },
+    {
+      "id": 23,
+      "question": "Bagaimana kualitas interaksi sosial Anda?",
+      "options": [
+        { "text": "Sangat memuaskan", "points": { "ceria": 3, "tenang": 2, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Cukup memuaskan", "points": { "ceria": 2, "tenang": 1, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Biasa saja", "points": { "ceria": 1, "tenang": 1, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Kurang memuaskan", "points": { "ceria": 0, "tenang": 0, "marah": 1, "cemas": 1, "sedih": 1 } },
+        { "text": "Sangat tidak memuaskan", "points": { "ceria": 0, "tenang": 0, "marah": 2, "cemas": 2, "sedih": 2 } }
+      ]
+    },
+    {
+      "id": 24,
+      "question": "Seberapa sering Anda merasa gugup atau tegang?",
+      "options": [
+        { "text": "Hampir tidak pernah", "points": { "ceria": 2, "tenang": 3, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Jarang", "points": { "ceria": 1, "tenang": 2, "marah": 0, "cemas": 1, "sedih": 0 } },
+        { "text": "Kadang-kadang", "points": { "ceria": 1, "tenang": 1, "marah": 1, "cemas": 2, "sedih": 0 } },
+        { "text": "Sering", "points": { "ceria": 0, "tenang": 0, "marah": 1, "cemas": 3, "sedih": 1 } },
+        { "text": "Hampir setiap saat", "points": { "ceria": 0, "tenang": 0, "marah": 2, "cemas": 4, "sedih": 1 } }
+      ]
+    },
+    {
+      "id": 25,
+      "question": "Bagaimana kemampuan Anda dalam menyelesaikan masalah?",
+      "options": [
+        { "text": "Sangat baik", "points": { "ceria": 2, "tenang": 3, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Cukup baik", "points": { "ceria": 1, "tenang": 2, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Biasa saja", "points": { "ceria": 1, "tenang": 1, "marah": 0, "cemas": 1, "sedih": 0 } },
+        { "text": "Agak sulit", "points": { "ceria": 0, "tenang": 0, "marah": 1, "cemas": 2, "sedih": 1 } },
+        { "text": "Sangat sulit", "points": { "ceria": 0, "tenang": 0, "marah": 2, "cemas": 3, "sedih": 2 } }
+      ]
+    },
+    {
+      "id": 26,
+      "question": "Seberapa sering Anda merasa percaya diri?",
+      "options": [
+        { "text": "Hampir selalu", "points": { "ceria": 3, "tenang": 2, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Sering", "points": { "ceria": 2, "tenang": 2, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Kadang-kadang", "points": { "ceria": 1, "tenang": 1, "marah": 0, "cemas": 1, "sedih": 0 } },
+        { "text": "Jarang", "points": { "ceria": 0, "tenang": 0, "marah": 1, "cemas": 2, "sedih": 1 } },
+        { "text": "Hampir tidak pernah", "points": { "ceria": 0, "tenang": 0, "marah": 1, "cemas": 3, "sedih": 2 } }
+      ]
+    },
+    {
+      "id": 27,
+      "question": "Bagaimana perasaan Anda tentang perubahan dalam hidup?",
+      "options": [
+        { "text": "Sangat nyaman dengan perubahan", "points": { "ceria": 2, "tenang": 3, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Cukup nyaman", "points": { "ceria": 1, "tenang": 2, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Biasa saja", "points": { "ceria": 1, "tenang": 1, "marah": 0, "cemas": 1, "sedih": 0 } },
+        { "text": "Agak tidak nyaman", "points": { "ceria": 0, "tenang": 0, "marah": 1, "cemas": 2, "sedih": 1 } },
+        { "text": "Sangat tidak nyaman/takut perubahan", "points": { "ceria": 0, "tenang": 0, "marah": 2, "cemas": 3, "sedih": 1 } }
+      ]
+    },
+    {
+      "id": 28,
+      "question": "Seberapa sering Anda merasa puas dengan pencapaian Anda?",
+      "options": [
+        { "text": "Hampir selalu", "points": { "ceria": 3, "tenang": 2, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Sering", "points": { "ceria": 2, "tenang": 1, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Kadang-kadang", "points": { "ceria": 1, "tenang": 1, "marah": 0, "cemas": 0, "sedih": 1 } },
+        { "text": "Jarang", "points": { "ceria": 0, "tenang": 0, "marah": 1, "cemas": 1, "sedih": 2 } },
+        { "text": "Hampir tidak pernah", "points": { "ceria": 0, "tenang": 0, "marah": 2, "cemas": 1, "sedih": 3 } }
+      ]
+    },
+    {
+      "id": 29,
+      "question": "Bagaimana kemampuan Anda untuk memaafkan diri sendiri dan orang lain?",
+      "options": [
+        { "text": "Sangat baik", "points": { "ceria": 2, "tenang": 3, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Cukup baik", "points": { "ceria": 1, "tenang": 2, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Biasa saja", "points": { "ceria": 1, "tenang": 1, "marah": 1, "cemas": 0, "sedih": 0 } },
+        { "text": "Agak sulit", "points": { "ceria": 0, "tenang": 0, "marah": 2, "cemas": 1, "sedih": 1 } },
+        { "text": "Sangat sulit", "points": { "ceria": 0, "tenang": 0, "marah": 3, "cemas": 1, "sedih": 2 } }
+      ]
+    },
+    {
+      "id": 30,
+      "question": "Secara keseluruhan, bagaimana Anda menilai kualitas hidup Anda sekarang?",
+      "options": [
+        { "text": "Sangat baik", "points": { "ceria": 4, "tenang": 3, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Baik", "points": { "ceria": 3, "tenang": 2, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Cukup", "points": { "ceria": 2, "tenang": 1, "marah": 0, "cemas": 0, "sedih": 0 } },
+        { "text": "Kurang baik", "points": { "ceria": 0, "tenang": 0, "marah": 1, "cemas": 1, "sedih": 2 } },
+        { "text": "Buruk", "points": { "ceria": 0, "tenang": 0, "marah": 2, "cemas": 2, "sedih": 4 } }
+      ]
+    }
+  ],
+  "emotionCategories": {
+    "ceria": {
+      "low": "Anda jarang merasakan emosi positif atau kegembiraan. Mungkin Anda sedang menghadapi masa sulit atau stres yang mengurangi kemampuan untuk merasa bahagia.",
+      "medium": "Anda memiliki tingkat keceriaan yang seimbang. Anda mampu merasa bahagia pada situasi yang tepat.",
+      "high": "Anda memiliki tingkat keceriaan yang tinggi. Anda mudah merasa bahagia dan melihat sisi positif dalam kehidupan."
+    },
+    "tenang": {
+      "low": "Anda mungkin sering merasa gelisah atau kesulitan untuk rileks. Meditasi atau teknik pernapasan bisa membantu meningkatkan ketenangan Anda.",
+      "medium": "Anda memiliki tingkat ketenangan yang cukup baik. Anda biasanya bisa mengendalikan diri dalam situasi stress.",
+      "high": "Anda memiliki tingkat ketenangan yang tinggi. Anda jarang terganggu oleh stres dan mampu menjaga keseimbangan emosi dengan baik."
+    },
+    "marah": {
+      "low": "Anda jarang merasa marah atau kesal. Anda cenderung sabar dan mampu mengendalikan emosi dengan baik.",
+      "medium": "Anda memiliki tingkat kemarahan yang wajar. Terkadang Anda merasa kesal tetapi umumnya masih dalam batas normal.",
+      "high": "Anda mungkin sering merasa kesal atau marah. Mengelola emosi marah dengan lebih efektif bisa meningkatkan kesejahteraan mental Anda."
+    },
+    "cemas": {
+      "low": "Anda jarang merasa cemas atau khawatir. Anda cenderung merasa aman dan percaya diri dalam menghadapi situasi.",
+      "medium": "Anda memiliki tingkat kecemasan yang seimbang. Anda mungkin kadang merasa khawatir tetapi masih dalam batas normal.",
+      "high": "Anda sering merasa cemas atau khawatir. Teknik relaksasi dan mindfulness bisa membantu mengurangi kecemasan Anda."
+    },
+    "sedih": {
+      "low": "Anda jarang merasa sedih atau murung. Anda memiliki pandangan yang cukup positif tentang kehidupan.",
+      "medium": "Anda memiliki tingkat kesedihan yang seimbang. Anda mampu merasakan sedih pada situasi yang tepat.",
+      "high": "Anda mungkin sering merasa sedih atau tertekan. Berbicara dengan profesional kesehatan mental bisa membantu Anda."
+    }
+  }
+}

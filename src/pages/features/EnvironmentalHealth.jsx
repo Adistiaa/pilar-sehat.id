@@ -398,16 +398,10 @@ Berikan Penilaian Udara beserta Penjelasan Singkat dan jelas mengenai Risiko Kes
 
   if (isLoading && !location) { // Show full page loader only on initial load and if location is not yet set
     return (
-<div className="flex flex-col items-center justify-center min-h-screen bg-[#f6fefc] dark:bg-[#010907] text-[#01130c] dark:text-[#ecfef7]">
-    <div className="w-16 h-16 border-4 border-[#1ff498] border-t-transparent dark:border-[#0be084] dark:border-t-transparent rounded-full animate-spin mb-4"></div>
-    <p className="text-xl font-medium bg-gradient-to-r from-[#1ff498] to-[#50b7f7] bg-clip-text text-transparent animate-pulse">
-      Mohon Menunggu
-    </p>
-    <p className="text-[#01130c]/70 dark:text-[#ecfef7]/70 mt-2">
-      Mencari lokasi Anda dan memuat data...
-    </p>
-  </div>
-
+      <div className="flex flex-col items-center justify-center min-h-screen bg-[#f6fefc] dark:bg-[#010907] text-[#01130c] dark:text-[#ecfef7]">
+        <Loader2 className="w-16 h-16 animate-spin text-[#1ff498]" />
+        <p className="mt-4 text-xl">Mencari lokasi Anda dan memuat data...</p>
+      </div>
     );
   }
   
@@ -431,7 +425,7 @@ Berikan Penilaian Udara beserta Penjelasan Singkat dan jelas mengenai Risiko Kes
     {/* Hero Section */}
     <motion.section
       ref={refs.hero}
-      initial="visible"
+      initial="hidden"
       animate={controls.hero}
       variants={sectionVariants}
       className="relative pt-28 pb-6 px-4 md:px-8 lg:px-16"
@@ -488,7 +482,7 @@ Berikan Penilaian Udara beserta Penjelasan Singkat dan jelas mengenai Risiko Kes
 
       {/* Section 1: Map and Weather */}
       <motion.section
-        initial="visible"
+        initial="hidden"
         ref={refs.quotes}
         animate={controls.quotes}
         variants={sectionVariants}
@@ -508,49 +502,42 @@ Berikan Penilaian Udara beserta Penjelasan Singkat dan jelas mengenai Risiko Kes
               Peta Interaktif
             </span>
           </motion.div>
-        {location ? (
-  <div>
-    <MapContainer
-      ref={mapRef}
-      center={[location.lat, location.lon]}
-      zoom={13}
-      scrollWheelZoom={true}
-      className="h-[300px] sm:h-[400px] lg:h-[450px] w-full rounded-lg z-0"
-    >
-      <TileLayer
-        attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      <SearchControl onSearchResult={setLocation} />
-      <Marker ref={markerRef} position={[location.lat, location.lon]}>
-        <Popup>
-          <b>{location.name || 'Lokasi Saat Ini'}</b><br />
-          Lat: {location.lat.toFixed(4)}, Lon: {location.lon.toFixed(4)}
-        </Popup>
-      </Marker>
-    </MapContainer>
-
-    {/* Tombol Lokasi Saya di bawah map */}
-    <div className="mt-4 flex justify-end">
-      <motion.button
-        onClick={returnToMyLocation}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        className="bg-white dark:bg-gray-800 border border-[#72e4f8] dark:border-[#07798d] hover:border-[#1ff498] dark:hover:border-[#0be084] rounded-lg px-3 py-1.5 shadow-md hover:shadow-lg text-[#01130c] dark:text-[#ecfef7] transition-all duration-200 flex items-center text-sm"
-        disabled={isDataLoading || isLoading}
-      >
-        <LocateFixed className="w-4 h-4 mr-1.5" />
-        Lokasi Saya
-      </motion.button>
-    </div>
-  </div>
-) : (
-  <div className="h-[300px] sm:h-[400px] lg:h-[450px] w-full rounded-lg flex items-center justify-center bg-[#e6f8f4] dark:bg-[#032b2e]">
-    <Loader2 className="w-8 h-8 animate-spin text-[#1ff498] dark:text-[#0be084]" />
-    <p className="ml-2 text-[#01130c]/70 dark:text-[#ecfef7]/70">Memuat peta...</p>
-  </div>
-)}
-
+          {location ? (
+            <MapContainer
+              ref={mapRef}
+              center={[location.lat, location.lon]}
+              zoom={13}
+              scrollWheelZoom={true}
+              className="h-[50px] sm:h-[100px] lg:h-[150px] w-full rounded-lg z-0"
+            >
+              <TileLayer
+                attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              <SearchControl onSearchResult={setLocation} />
+              <Marker ref={markerRef} position={[location.lat, location.lon]}>
+                <Popup>
+                  <b>{location.name || 'Lokasi Saat Ini'}</b><br />
+                  Lat: {location.lat.toFixed(4)}, Lon: {location.lon.toFixed(4)}
+                </Popup>
+              </Marker>
+            </MapContainer>
+          ) : (
+            <div className="h-[300px] sm:h-[400px] lg:h-[450px] w-full rounded-lg flex items-center justify-center bg-[#e6f8f4] dark:bg-[#032b2e]">
+              <Loader2 className="w-8 h-8 animate-spin text-[#1ff498] dark:text-[#0be084]" />
+              <p className="ml-2 text-[#01130c]/70 dark:text-[#ecfef7]/70">Memuat peta...</p>
+            </div>
+          )}
+          <motion.button
+            onClick={returnToMyLocation}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="absolute z-[1000] top-10 right-10 bg-[#f6fefc] dark:bg-[#010907] border border-[#72e4f8] dark:border-[#07798d] hover:border-[#1ff498] dark:hover:border-[#0be084] rounded-lg px-3 py-1.5 shadow-md hover:shadow-lg text-[#01130c] dark:text-[#ecfef7] transition-all duration-200 flex items-center text-sm"
+            disabled={isDataLoading || isLoading}
+          >
+            <LocateFixed className="w-4 h-4 mr-1.5" />
+            Lokasi Saya
+          </motion.button>
         </motion.div>
 
         {/* Weather Info Card */}

@@ -15,7 +15,6 @@ import {
   ChartLine,
   Newspaper
 } from "lucide-react";
-import logo from "../assets/logo.svg";
 import { useLocation } from "react-router-dom";
 
 const Footer = () => {
@@ -60,7 +59,7 @@ const Footer = () => {
             variants={itemVariants}
             className="flex items-center mb-3"
           >
-            <img src={logo} alt="Pillar Sehat Logo" className="h-35" />
+            <img src="https://res.cloudinary.com/dxbkwpm3i/image/upload/v1747146048/PilarSehat_2_riqncr.svg" alt="PilarSehat Logo" className="h-40" />
           </motion.div>
           <motion.p
             variants={itemVariants}

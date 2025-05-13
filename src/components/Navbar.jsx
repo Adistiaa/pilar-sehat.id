@@ -11,7 +11,6 @@ import {
   Monitor,
 } from "lucide-react";
 import SearchBar from "./SearchBar";
-import logo from "../assets/logo.svg";
 import { useTheme } from "../context/ThemeContext";
 
 const Navbar = () => {
@@ -98,7 +97,8 @@ const Navbar = () => {
             whileHover={{ opacity: 0.8 }}
             whileTap={{ scale: 0.98 }}
           >
-            <img src={logo} alt="Logo" draggable="false" onContextMenu={(e) => e.preventDefault()} className="h-18" />
+            <img src="https://res.cloudinary.com/dxbkwpm3i/image/upload/v1747146048/PilarSehat_2_riqncr.svg" alt="Logo" draggable="false" onContextMenu={(e) => e.preventDefault()} className="h-15" />
+            <p className="text-[#0be084] dark:text-[#ecfef7] font-bold text-3xl">PilarSehat</p>
           </motion.a>
 
           {/* Center (Navigation + Search) */}

@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import * as _ from 'lodash';
 import useScrollAnimations from "../components/AnimasiScroll";
+import { motion } from "framer-motion";
 
 const NewsCard = ({ newsItem, onClick }) => {
   const formatDate = (dateString) => {
@@ -43,7 +44,7 @@ const NewsCard = ({ newsItem, onClick }) => {
             <span>{newsItem.pubDate ? formatDate(newsItem.pubDate) : (newsItem.isInternational ? "No date available" : "Tidak ada tanggal")}</span>
           </div>
           <span className="bg-[#1ff498] dark:bg-[#0be084] text-[#01130c] dark:text-[#010907] text-xs font-medium px-2 py-1 rounded-full">
-          {newsItem.isInternational ? "International" : "Dalam Negeri"}
+          {newsItem.isInternational ? "International" : "Indonesia"}
           </span>
         </div>
         <h3 className="font-bold text-lg mb-3 line-clamp-3 group-hover:text-[#1ff498] dark:group-hover:text-[#0be084] transition-colors">
@@ -569,6 +570,30 @@ const DailyPage = () => {
     setLoadingInternational(true);
     fetchInternationalNews();
   };
+
+  const itemVariants = {
+    hidden: {
+      opacity: 0,
+      y: 20,
+      scale: 0.98,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 0.5,
+        ease: [0.16, 0.77, 0.47, 0.97],
+      },
+    },
+    hover: {
+      scale: 1.03,
+      transition: {
+        duration: 0.3,
+        ease: "easeOut",
+      },
+    },
+  };
   
   return (
     <div className="bg-[#f6fefc] dark:bg-[#010907] text-[#01130c] dark:text-[#ecfef7] min-h-screen" id="content">
@@ -578,19 +603,22 @@ const DailyPage = () => {
           <div className="inline-block border-2 border-[#1ff498] dark:border-[#0be084] text-[#01130c] dark:text-[#ecfef7] px-4 py-1 rounded-full mb-4 data-scroll data-scroll-speed='0.5'">
             <span className="flex items-center text-sm font-medium">
               <Newspaper className="w-4 h-4 mr-2" />
-              Berita Kesehatan
+              Berita Harian
             </span>
           </div>
 
-          <h1 className="text-3xl md:text-4xl font-bold mb-4 data-scroll data-scroll-speed='1'">
+          <motion.h1
+            variants={itemVariants}
+            className="text-3xl font-bold mb-4"
+          >
+            Berita Terkini{" "}
             <span className="bg-gradient-to-r from-[#1ff498] to-[#50b7f7] bg-clip-text text-transparent">
-              Berita Kesehatan
-            </span>{" "}
-            Terkini
-          </h1>
+              Kesehatan
+            </span>
+          </motion.h1>
 
           <p className="text-[#01130c]/70 dark:text-[#ecfef7]/70 max-w-2xl mx-auto data-scroll data-scroll-speed='1.5'">
-            Informasi terkini seputar kesehatan dari dalam dan luar negeri
+            Informasi terkini seputar kesehatan yang perlu Anda ketahui untuk menjaga gaya hidup sehat dari dalam dan luar negeri
           </p>
         </div>
       </section>
@@ -607,7 +635,7 @@ const DailyPage = () => {
             }`}
           >
             <Home className="w-4 h-4" />
-            <span>Berita Terkini Dalam Negeri</span>
+            <span>Berita Terkini Indonesia</span>
           </button>
           <button
            onClick={() => setActiveTab('international')}

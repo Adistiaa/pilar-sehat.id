@@ -11,6 +11,7 @@ const useScrollAnimations = () => {
   const refs = {
     container: useRef(null),
     hero: useRef(null),
+    quotes: useRef(null),
     trust: useRef(null),
     features: useRef(null),
     whyChooseUs: useRef(null),
@@ -35,6 +36,8 @@ const useScrollAnimations = () => {
     amount: 0.15, // Lower threshold for hero section
     margin: "0px 0px -20% 0px"
   });
+
+  const isQuotesInView = useInView(refs.quotes, observerOptions);
   const isTrustInView = useInView(refs.trust, observerOptions);
   const isFeaturesInView = useInView(refs.features, observerOptions);
   const isWhyChooseUsInView = useInView(refs.whyChooseUs, observerOptions);
@@ -49,6 +52,7 @@ const useScrollAnimations = () => {
   // Animation controls with initial states
   const controls = {
     hero: useAnimation(),
+    quotes: useAnimation(),
     trust: useAnimation(),
     features: useAnimation(),
     whyChooseUs: useAnimation(),
@@ -150,6 +154,7 @@ const useScrollAnimations = () => {
   useEffect(() => {
     // Set initial states
     controls.hero.set("hidden");
+    controls.quotes.set("hidden");
     controls.trust.set("hidden");
     controls.features.set("hidden");
     controls.whyChooseUs.set("hidden");
@@ -175,6 +180,7 @@ const useScrollAnimations = () => {
   // Animation triggers with cleanup
   useEffect(() => {
     if (isHeroInView) controls.hero.start("visible");
+    if (isQuotesInView) controls.quotes.start("visible");
     if (isTrustInView) controls.trust.start("visible");
     if (isFeaturesInView) controls.features.start("visible");
     if (isWhyChooseUsInView) controls.whyChooseUs.start("visible");
@@ -183,6 +189,7 @@ const useScrollAnimations = () => {
     if (isCtaInView) controls.cta.start("visible");
   }, [
     isHeroInView,
+    isQuotesInView,
     isTrustInView,
     isFeaturesInView,
     isWhyChooseUsInView,
@@ -202,6 +209,7 @@ const useScrollAnimations = () => {
     visibility: {
       isContainerInView,
       isHeroInView,
+      isQuotesInView,
       isTrustInView,
       isFeaturesInView,
       isWhyChooseUsInView,

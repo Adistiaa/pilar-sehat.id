@@ -215,7 +215,8 @@ const AboutPage = () => {
   return (
     <div
       className="bg-[#f6fefc] dark:bg-[#010907] text-[#01130c] dark:text-[#ecfef7]"
-      ref={refs.container} id="content"
+      ref={refs.container}
+      id="content"
     >
       {/* Hero Section */}
       <motion.section
@@ -468,20 +469,21 @@ const AboutPage = () => {
                   key={index}
                   variants={itemVariants}
                   whileHover={{
-                    y: -5,
-                    backgroundColor: "rgba(31, 244, 152, 0.05)",
-                    borderColor: "#1ff498",
+                    y: -5, // Keep the lift effect
                     transition: { duration: 0.2 },
                   }}
-                  className="p-6 rounded-xl bg-[#f6fefc] dark:bg-[#010907] border border-[#72e4f8]/30 dark:border-[#07798d]/30
-          hover:bg-[#1ff498]/5 hover:border-[#1ff498] dark:hover:bg-[#0be084]/5 dark:hover:border-[#0be084]
-          transition-colors duration-300"
+                  className="p-6 rounded-xl bg-[#f6fefc] dark:bg-[#010907] border border-[#72e4f8]/30 dark:border-[#07798d]/30 
+            hover:bg-[#1ff498]/10 dark:hover:bg-[#0be084]/10 
+            hover:border-[#1ff498] dark:hover:border-[#0be084] 
+            transition-all duration-300"
                 >
                   <div className="flex items-center mb-3">
                     <div className="bg-[#1ff498]/10 dark:bg-[#0be084]/10 p-2 rounded-lg mr-3 text-[#1ff498] dark:text-[#0be084]">
                       {feature.icon}
                     </div>
-                    <h3 className="font-semibold">{feature.title}</h3>
+                    <h3 className="font-semibold text-[#01130c] dark:text-[#ecfef7]">
+                      {feature.title}
+                    </h3>
                   </div>
                   <p className="text-sm text-[#01130c]/70 dark:text-[#ecfef7]/70">
                     {feature.desc}

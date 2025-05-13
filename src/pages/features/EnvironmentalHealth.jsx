@@ -425,7 +425,7 @@ Berikan Penilaian Udara beserta Penjelasan Singkat dan jelas mengenai Risiko Kes
     {/* Hero Section */}
     <motion.section
       ref={refs.hero}
-      initial="hidden"
+      initial="visible"
       animate={controls.hero}
       variants={sectionVariants}
       className="relative pt-28 pb-6 px-4 md:px-8 lg:px-16"
@@ -482,7 +482,7 @@ Berikan Penilaian Udara beserta Penjelasan Singkat dan jelas mengenai Risiko Kes
 
       {/* Section 1: Map and Weather */}
       <motion.section
-        initial="hidden"
+        initial="visible"
         ref={refs.quotes}
         animate={controls.quotes}
         variants={sectionVariants}

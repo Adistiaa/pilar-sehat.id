@@ -75,6 +75,10 @@ const Navbar = () => {
     }
   };
 
+  // Logo URLs (replace with actual URLs)
+  const lightLogo = 'https://res.cloudinary.com/dxbkwpm3i/image/upload/v1747231230/const_staggerVariants_hidden_opacity_0_visible_opacity_1_transition_staggerChildren_0.1_delayChildren_0.2_l60kgk.svg'; // Light Mode logo
+  const darkLogo = 'https://res.cloudinary.com/dxbkwpm3i/image/upload/v1747259722/const_staggerVariants_hidden_opacity_0_visible_opacity_1_transition_staggerChildren_0.1_delayChildren_0.2_1_kjxtab.svg'; //  Dark Mode logo
+
   return (
     <>
       {/* Main Navbar - Fixed Height */}
@@ -97,7 +101,11 @@ const Navbar = () => {
             whileHover={{ opacity: 0.8 }}
             whileTap={{ scale: 0.98 }}
           >
-            <img src="https://res.cloudinary.com/dxbkwpm3i/image/upload/v1747231230/const_staggerVariants_hidden_opacity_0_visible_opacity_1_transition_staggerChildren_0.1_delayChildren_0.2_l60kgk.svg" alt="Logo" draggable="false" onContextMenu={(e) => e.preventDefault()} className="h-15" />
+            <img src={isDarkMode ? darkLogo : lightLogo}
+            alt="Logo" 
+            draggable="false" 
+            onContextMenu={(e) => e.preventDefault()} 
+            className="h-15" />
           </motion.a>
 
           {/* Center (Navigation + Search) */}

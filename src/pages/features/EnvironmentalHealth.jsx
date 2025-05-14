@@ -508,7 +508,7 @@ Berikan Penilaian Udara beserta Penjelasan Singkat dan jelas mengenai Risiko Kes
               center={[location.lat, location.lon]}
               zoom={13}
               scrollWheelZoom={true}
-              className="h-[50px] sm:h-[100px] lg:h-[150px] w-full rounded-lg z-0"
+              className="h-[150px] sm:h-[250px] lg:h-[250px] w-full rounded-lg z-0"
             >
               <TileLayer
                 attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -532,8 +532,11 @@ Berikan Penilaian Udara beserta Penjelasan Singkat dan jelas mengenai Risiko Kes
             onClick={returnToMyLocation}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="absolute z-[1000] top-10 right-10 bg-[#f6fefc] dark:bg-[#010907] border border-[#72e4f8] dark:border-[#07798d] hover:border-[#1ff498] dark:hover:border-[#0be084] rounded-lg px-3 py-1.5 shadow-md hover:shadow-lg text-[#01130c] dark:text-[#ecfef7] transition-all duration-200 flex items-center text-sm"
             disabled={isDataLoading || isLoading}
+            className="mt-4 bg-[#f6fefc] dark:bg-[#010907] border border-[#72e4f8] dark:border-[#07798d] 
+              hover:border-[#1ff498] dark:hover:border-[#0be084] rounded-lg px-4 py-2 shadow-md 
+              hover:shadow-lg text-[#01130c] dark:text-[#ecfef7] transition-all duration-200 
+              flex items-center text-sm disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <LocateFixed className="w-4 h-4 mr-1.5" />
             Lokasi Saya
@@ -573,7 +576,7 @@ Berikan Penilaian Udara beserta Penjelasan Singkat dan jelas mengenai Risiko Kes
       {pollutionData && !isDataLoading && (
         <motion.section
           variants={sectionVariants}
-          initial="hidden"
+          initial="visible"
           animate="visible"
           className="bg-[#f6fefc] dark:bg-[#010907] border-2 border-[#72e4f8] dark:border-[#07798d] hover:border-[#1ff498] dark:hover:border-[#0be084] p-8 rounded-2xl shadow-sm hover:shadow-md transition-all"
         >
@@ -653,7 +656,7 @@ Berikan Penilaian Udara beserta Penjelasan Singkat dan jelas mengenai Risiko Kes
       {isDataLoading && !pollutionData && (
         <motion.section
           variants={sectionVariants}
-          initial="hidden"
+          initial="visible"
           animate="visible"
           className="bg-[#f6fefc] dark:bg-[#010907] border-2 border-[#72e4f8] dark:border-[#07798d] hover:border-[#1ff498] dark:hover:border-[#0be084] p-8 rounded-2xl shadow-sm hover:shadow-md transition-all"
         >
@@ -668,7 +671,7 @@ Berikan Penilaian Udara beserta Penjelasan Singkat dan jelas mengenai Risiko Kes
       {aiAnalysis && !isAiLoading && (
         <motion.section
           variants={sectionVariants}
-          initial="hidden"
+          initial="visible"
           animate="visible"
           className="bg-[#f6fefc] dark:bg-[#010907] border-2 border-[#72e4f8] dark:border-[#07798d] hover:border-[#1ff498] dark:hover:border-[#0be084] p-8 rounded-2xl shadow-sm hover:shadow-md transition-all"
         >
@@ -689,7 +692,7 @@ Berikan Penilaian Udara beserta Penjelasan Singkat dan jelas mengenai Risiko Kes
       {isAiLoading && (
         <motion.section
           variants={sectionVariants}
-          initial="hidden"
+          initial="visible"
           animate="visible"
           className="bg-[#f6fefc] dark:bg-[#010907] border-2 border-[#72e4f8] dark:border-[#07798d] hover:border-[#1ff498] dark:hover:border-[#0be084] p-8 rounded-2xl shadow-sm hover:shadow-md transition-all"
         >

@@ -594,22 +594,49 @@ const DailyPage = () => {
       },
     },
   };
+
+  const staggerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  // Get scroll animations from hook
+    const { refs, controls, sectionVariants } = useScrollAnimations();
   
   return (
-    <div className="bg-[#f6fefc] dark:bg-[#010907] text-[#01130c] dark:text-[#ecfef7] min-h-screen" id="content">
+    <div className="bg-[#f6fefc] dark:bg-[#010907] text-[#01130c] dark:text-[#ecfef7] min-h-screen" 
+    id="content"
+    ref={refs.container}
+    >
       {/* Hero Section */}
-      <section className="relative pt-28 pb-6 px-4 md:px-8 lg:px-16 data-scroll-section">
+      <motion.section
+        ref={refs.hero}
+        initial="hidden"
+        animate={controls.hero}
+        variants={sectionVariants}
+        className="relative pt-20 sm:pt-24 pb-6 px-4 sm:px-6 lg:px-8"
+        data-scroll-section
+      >
         <div className="max-w-6xl mx-auto text-center">
-          <div className="inline-block border-2 border-[#1ff498] dark:border-[#0be084] text-[#01130c] dark:text-[#ecfef7] px-4 py-1 rounded-full mb-4 data-scroll data-scroll-speed='0.5'">
+          <motion.div
+            variants={itemVariants}
+            className="inline-block border-2 border-[#1ff498] dark:border-[#0be084] text-[#01130c] dark:text-[#ecfef7] px-4 py-1 rounded-full mb-4"
+          >
             <span className="flex items-center text-sm font-medium">
               <Newspaper className="w-4 h-4 mr-2" />
               Berita Harian
             </span>
-          </div>
+          </motion.div>
 
           <motion.h1
             variants={itemVariants}
-            className="text-3xl font-bold mb-4"
+            className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4"
           >
             Berita Terkini{" "}
             <span className="bg-gradient-to-r from-[#1ff498] to-[#50b7f7] bg-clip-text text-transparent">
@@ -617,103 +644,130 @@ const DailyPage = () => {
             </span>
           </motion.h1>
 
-          <p className="text-[#01130c]/70 dark:text-[#ecfef7]/70 max-w-2xl mx-auto data-scroll data-scroll-speed='1.5'">
+          <motion.p
+            variants={itemVariants}
+            className="text-sm sm:text-base text-[#01130c]/70 dark:text-[#ecfef7]/70 max-w-xl sm:max-w-2xl mx-auto"
+          >
             Informasi terkini seputar kesehatan yang perlu Anda ketahui untuk menjaga gaya hidup sehat dari dalam dan luar negeri
-          </p>
+          </motion.p>
         </div>
-      </section>
+      </motion.section>
 
       {/* Tab Navigation */}
-      <div className="max-w-6xl mx-auto px-4 md:px-8 lg:px-16 mb-8">
-        <div className="bg-white dark:bg-[#0a1a16] rounded-lg shadow-sm border border-[#72e4f8] dark:border-[#07798d] p-1 flex">
+      <motion.div
+        ref={refs.quotes}
+        initial="hidden"
+        animate={controls.quotes}
+        variants={sectionVariants}
+        className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 sm:mb-8"
+      >
+        <motion.div
+          variants={itemVariants}
+          className="bg-white dark:bg-[#0a1a16] rounded-lg shadow-sm border border-[#72e4f8] dark:border-[#07798d] p-1 flex flex-col sm:flex-row"
+        >
           <button
             onClick={() => setActiveTab('domestic')}
-            className={`flex-1 py-3 flex justify-center items-center gap-2 rounded-md transition-all ${
-              activeTab === 'domestic'
+            className={`flex-1 py-2 sm:py-3 flex justify-center items-center gap-2 rounded-md transition-all text-sm sm:text-base
+              ${activeTab === 'domestic'
                 ? 'bg-[#1ff498] dark:bg-[#0be084] text-[#01130c] dark:text-[#010907] font-medium'
                 : 'hover:bg-[#1ff498]/10 dark:hover:bg-[#0be084]/10'
-            }`}
+              }`}
           >
             <Home className="w-4 h-4" />
             <span>Berita Terkini Indonesia</span>
           </button>
           <button
-           onClick={() => setActiveTab('international')}
-            className={`flex-1 py-3 flex justify-center items-center gap-2 rounded-md transition-all ${
-              activeTab === 'international'
+            onClick={() => setActiveTab('international')}
+            className={`flex-1 py-2 sm:py-3 flex justify-center items-center gap-2 rounded-md transition-all text-sm sm:text-base
+              ${activeTab === 'international'
                 ? 'bg-[#1ff498] dark:bg-[#0be084] text-[#01130c] dark:text-[#010907] font-medium'
                 : 'hover:bg-[#1ff498]/10 dark:hover:bg-[#0be084]/10'
-            }`}
+              }`}
           >
             <Globe className="w-4 h-4" />
             <span>Berita Terkini Mancanegara</span>
           </button>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       {/* Main Content */}
-      <div className="max-w-6xl mx-auto px-4 md:px-8 lg:px-16 pb-32 data-scroll-section">
+      <motion.section
+        ref={refs.trust}
+        initial="hidden"
+        animate={controls.trust}
+        variants={sectionVariants}
+        className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-24 sm:pb-32"
+        data-scroll-section
+      >
         {activeTab === 'domestic' ? (
-          <>
+          <motion.div variants={staggerVariants}>
             {/* Search Bar and Filters for Domestic News */}
-            <div className="mb-8">
-              <div className="flex items-center justify-between gap-4">
-                <div className="flex-1">
+            <motion.div variants={itemVariants} className="mb-6 sm:mb-8">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="w-full sm:flex-1">
                   <div className="flex items-center bg-white dark:bg-[#0a1a16] border-2 border-[#72e4f8] dark:border-[#07798d] rounded-full p-2 px-4 focus-within:border-[#1ff498] dark:focus-within:border-[#0be084] transition-all">
                     <Search className="w-5 h-5 text-[#01130c]/50 dark:text-[#ecfef7]/50" />
                     <input
                       type="text"
                       placeholder="Cari berita kesehatan dalam negeri..."
-                      className="flex-1 bg-transparent border-none outline-none px-3 py-1 text-[#01130c] dark:text-[#ecfef7]"
+                      className="flex-1 bg-transparent border-none outline-none px-3 py-1 text-sm sm:text-base text-[#01130c] dark:text-[#ecfef7]"
                       value={searchTermDomestic}
                       onChange={(e) => setSearchTermDomestic(e.target.value)}
                     />
                   </div>
                 </div>
-                
-                <button
+                <motion.button
+                  variants={itemVariants}
                   onClick={handleDomesticRefresh}
                   disabled={isRefreshingDomestic}
-                  className={`flex items-center justify-center px-4 py-2 rounded-full bg-[#1ff498] dark:bg-[#0be084] text-[#01130c] dark:text-[#010907] font-medium transition-all 
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`w-full sm:w-auto flex items-center justify-center px-4 py-2 rounded-full bg-[#1ff498] dark:bg-[#0be084] text-[#01130c] dark:text-[#010907] font-medium transition-all text-sm sm:text-base
                     ${isRefreshingDomestic ? 'opacity-70 cursor-not-allowed' : 'hover:bg-[#1ff498]/80 dark:hover:bg-[#0be084]/80'}`}
                 >
                   <RefreshCw className={`w-4 h-4 mr-2 ${isRefreshingDomestic ? 'animate-spin' : ''}`} />
                   {isRefreshingDomestic ? 'Memuat...' : 'Refresh'}
-                </button>
+                </motion.button>
               </div>
-              
+
               {/* Category Filters for Domestic News */}
               {categoriesDomestic.length > 0 && (
-                <div className="mt-4 flex flex-wrap gap-2">
+                <motion.div variants={itemVariants} className="mt-4 flex flex-wrap gap-2">
                   <div className="flex items-center text-sm text-[#01130c]/70 dark:text-[#ecfef7]/70 mr-2">
                     <Tag className="w-4 h-4 mr-1" />
                     <span>Filter:</span>
                   </div>
                   {categoriesDomestic.map((category, index) => (
-                    <button
+                    <motion.button
                       key={index}
+                      variants={itemVariants}
                       onClick={() => handleDomesticCategorySelect(category)}
-                      className={`text-xs px-3 py-1.5 rounded-full transition-all ${
-                        selectedCategoryDomestic === category 
-                          ? "bg-[#1ff498] dark:bg-[#0be084] text-[#01130c] dark:text-[#010907]" 
-                          : "bg-white dark:bg-[#0a1a16] text-[#01130c] dark:text-[#ecfef7] border border-[#72e4f8] dark:border-[#07798d] hover:bg-[#1ff498]/10 dark:hover:bg-[#0be084]/10"
-                      }`}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className={`text-xs px-3 py-1.5 rounded-full transition-all
+                        ${selectedCategoryDomestic === category
+                          ? 'bg-[#1ff498] dark:bg-[#0be084] text-[#01130c] dark:text-[#010907]'
+                          : 'bg-white dark:bg-[#0a1a16] text-[#01130c] dark:text-[#ecfef7] border border-[#72e4f8] dark:border-[#07798d] hover:bg-[#1ff498]/10 dark:hover:bg-[#0be084]/10'
+                        }`}
                     >
                       {category}
-                    </button>
+                    </motion.button>
                   ))}
                   {selectedCategoryDomestic && (
-                    <button
+                    <motion.button
+                      variants={itemVariants}
                       onClick={() => setSelectedCategoryDomestic(null)}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
                       className="text-xs px-3 py-1.5 rounded-full bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-900/40 transition-all"
                     >
                       Reset Filter <X className="w-3 h-3 inline-block ml-1" />
-                    </button>
+                    </motion.button>
                   )}
-                </div>
+                </motion.div>
               )}
-            </div>
-            
+            </motion.div>
+
             {/* Domestic News Content */}
             {loadingDomestic ? (
               <LoadingState isInternational={false} />
@@ -722,97 +776,117 @@ const DailyPage = () => {
             ) : currentDomesticNews.length === 0 ? (
               <EmptyState searchTerm={searchTermDomestic} isInternational={false} />
             ) : (
-              <>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <motion.div variants={staggerVariants}>
+                <motion.div
+                  variants={itemVariants}
+                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8"
+                >
                   {currentDomesticNews.map((newsItem, index) => (
-                    <div key={index} className="data-scroll data-scroll-speed='0.2'">
-                      <NewsCard 
-                        newsItem={newsItem} 
-                        onClick={() => openModal(newsItem)} 
-                      />
-                    </div>
+                    <motion.div
+                      key={index}
+                      variants={itemVariants}
+                      whileHover={{ y: -5 }}
+                      className="data-scroll data-scroll-speed='0.2'"
+                    >
+                      <NewsCard newsItem={newsItem} onClick={() => openModal(newsItem)} />
+                    </motion.div>
                   ))}
-                </div>
-                
+                </motion.div>
+
                 {/* Results summary for Domestic News */}
-                <div className="mt-8 text-center text-sm text-[#01130c]/60 dark:text-[#ecfef7]/60">
-                  Menampilkan {indexOfFirstDomesticNews + 1}-{Math.min(indexOfLastDomesticNews, filteredDomesticNews.length)} dari {filteredDomesticNews.length} berita 
+                <motion.div
+                  variants={itemVariants}
+                  className="mt-6 sm:mt-8 text-center text-xs sm:text-sm text-[#01130c]/60 dark:text-[#ecfef7]/60"
+                >
+                  Menampilkan {indexOfFirstDomesticNews + 1}-
+                  {Math.min(indexOfLastDomesticNews, filteredDomesticNews.length)} dari{' '}
+                  {filteredDomesticNews.length} berita
                   {searchTermDomestic && ` untuk pencarian "${searchTermDomestic}"`}
                   {selectedCategoryDomestic && ` dalam kategori "${selectedCategoryDomestic}"`}
-                </div>
-                
+                </motion.div>
+
                 {/* Pagination for Domestic News */}
                 {totalDomesticPages > 1 && (
-                  <Pagination 
-                    currentPage={currentPageDomestic} 
-                    totalPages={totalDomesticPages} 
-                    onPageChange={handleDomesticPageChange} 
-                  />
+                  <motion.div variants={itemVariants}>
+                    <Pagination
+                      currentPage={currentPageDomestic}
+                      totalPages={totalDomesticPages}
+                      onPageChange={handleDomesticPageChange}
+                    />
+                  </motion.div>
                 )}
-              </>
+              </motion.div>
             )}
-          </>
+          </motion.div>
         ) : (
-          <>
+          <motion.div variants={staggerVariants}>
             {/* Search Bar and Filters for International News */}
-            <div className="mb-8">
-              <div className="flex items-center justify-between gap-4">
-                <div className="flex-1">
+            <motion.div variants={itemVariants} className="mb-6 sm:mb-8">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="w-full sm:flex-1">
                   <div className="flex items-center bg-white dark:bg-[#0a1a16] border-2 border-[#72e4f8] dark:border-[#07798d] rounded-full p-2 px-4 focus-within:border-[#1ff498] dark:focus-within:border-[#0be084] transition-all">
                     <Search className="w-5 h-5 text-[#01130c]/50 dark:text-[#ecfef7]/50" />
                     <input
                       type="text"
-                      placeholder="Cari berita kesehatan mancanegera..."
-                      className="flex-1 bg-transparent border-none outline-none px-3 py-1 text-[#01130c] dark:text-[#ecfef7]"
+                      placeholder="Cari berita kesehatan mancanegara..."
+                      className="flex-1 bg-transparent border-none outline-none px-3 py-1 text-sm sm:text-base text-[#01130c] dark:text-[#ecfef7]"
                       value={searchTermInternational}
                       onChange={(e) => setSearchTermInternational(e.target.value)}
                     />
                   </div>
                 </div>
-                
-                <button
+                <motion.button
+                  variants={itemVariants}
                   onClick={handleInternationalRefresh}
                   disabled={isRefreshingInternational}
-                  className={`flex items-center justify-center px-4 py-2 rounded-full bg-[#1ff498] dark:bg-[#0be084] text-[#01130c] dark:text-[#010907] font-medium transition-all 
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`w-full sm:w-auto flex items-center justify-center px-4 py-2 rounded-full bg-[#1ff498] dark:bg-[#0be084] text-[#01130c] dark:text-[#010907] font-medium transition-all text-sm sm:text-base
                     ${isRefreshingInternational ? 'opacity-70 cursor-not-allowed' : 'hover:bg-[#1ff498]/80 dark:hover:bg-[#0be084]/80'}`}
                 >
                   <RefreshCw className={`w-4 h-4 mr-2 ${isRefreshingInternational ? 'animate-spin' : ''}`} />
-                  {isRefreshingInternational ? 'Loading...' : 'Refresh'}
-                </button>
+                  {isRefreshingInternational ? 'Memuat...' : 'Refresh'}
+                </motion.button>
               </div>
-              
+
               {/* Category Filters for International News */}
               {categoriesInternational.length > 0 && (
-                <div className="mt-4 flex flex-wrap gap-2">
+                <motion.div variants={itemVariants} className="mt-4 flex flex-wrap gap-2">
                   <div className="flex items-center text-sm text-[#01130c]/70 dark:text-[#ecfef7]/70 mr-2">
                     <Tag className="w-4 h-4 mr-1" />
                     <span>Filter:</span>
                   </div>
                   {categoriesInternational.map((category, index) => (
-                    <button
+                    <motion.button
                       key={index}
+                      variants={itemVariants}
                       onClick={() => handleInternationalCategorySelect(category)}
-                      className={`text-xs px-3 py-1.5 rounded-full transition-all ${
-                        selectedCategoryInternational === category 
-                          ? "bg-[#1ff498] dark:bg-[#0be084] text-[#01130c] dark:text-[#010907]" 
-                          : "bg-white dark:bg-[#0a1a16] text-[#01130c] dark:text-[#ecfef7] border border-[#72e4f8] dark:border-[#07798d] hover:bg-[#1ff498]/10 dark:hover:bg-[#0be084]/10"
-                      }`}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className={`text-xs px-3 py-1.5 rounded-full transition-all
+                        ${selectedCategoryInternational === category
+                          ? 'bg-[#1ff498] dark:bg-[#0be084] text-[#01130c] dark:text-[#010907]'
+                          : 'bg-white dark:bg-[#0a1a16] text-[#01130c] dark:text-[#ecfef7] border border-[#72e4f8] dark:border-[#07798d] hover:bg-[#1ff498]/10 dark:hover:bg-[#0be084]/10'
+                        }`}
                     >
                       {category}
-                    </button>
+                    </motion.button>
                   ))}
                   {selectedCategoryInternational && (
-                    <button
+                    <motion.button
+                      variants={itemVariants}
                       onClick={() => setSelectedCategoryInternational(null)}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
                       className="text-xs px-3 py-1.5 rounded-full bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-900/40 transition-all"
                     >
                       Reset Filter <X className="w-3 h-3 inline-block ml-1" />
-                    </button>
+                    </motion.button>
                   )}
-                </div>
+                </motion.div>
               )}
-            </div>
-            
+            </motion.div>
+
             {/* International News Content */}
             {loadingInternational ? (
               <LoadingState isInternational={true} />
@@ -821,38 +895,50 @@ const DailyPage = () => {
             ) : currentInternationalNews.length === 0 ? (
               <EmptyState searchTerm={searchTermInternational} isInternational={true} />
             ) : (
-              <>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <motion.div variants={staggerVariants}>
+                <motion.div
+                  variants={itemVariants}
+                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8"
+                >
                   {currentInternationalNews.map((newsItem, index) => (
-                    <div key={index} className="data-scroll data-scroll-speed='0.2'">
-                      <NewsCard 
-                        newsItem={newsItem} 
-                        onClick={() => openModal(newsItem)} 
-                      />
-                    </div>
+                    <motion.div
+                      key={index}
+                      variants={itemVariants}
+                      whileHover={{ y: -5 }}
+                      className="data-scroll data-scroll-speed='0.2'"
+                    >
+                      <NewsCard newsItem={newsItem} onClick={() => openModal(newsItem)} />
+                    </motion.div>
                   ))}
-                </div>
-                
+                </motion.div>
+
                 {/* Results summary for International News */}
-                <div className="mt-8 text-center text-sm text-[#01130c]/60 dark:text-[#ecfef7]/60">
-                  Showing {indexOfFirstInternationalNews + 1}-{Math.min(indexOfLastInternationalNews, filteredInternationalNews.length)} of {filteredInternationalNews.length} news items
-                  {searchTermInternational && ` for search "${searchTermInternational}"`}
-                  {selectedCategoryInternational && ` in category "${selectedCategoryInternational}"`}
-                </div>
-                
+                <motion.div
+                  variants={itemVariants}
+                  className="mt-6 sm:mt-8 text-center text-xs sm:text-sm text-[#01130c]/60 dark:text-[#ecfef7]/60"
+                >
+                  Menampilkan {indexOfFirstInternationalNews + 1}-
+                  {Math.min(indexOfLastInternationalNews, filteredInternationalNews.length)} dari{' '}
+                  {filteredInternationalNews.length} berita
+                  {searchTermInternational && ` untuk pencarian "${searchTermInternational}"`}
+                  {selectedCategoryInternational && ` dalam kategori "${selectedCategoryInternational}"`}
+                </motion.div>
+
                 {/* Pagination for International News */}
                 {totalInternationalPages > 1 && (
-                  <Pagination 
-                    currentPage={currentPageInternational} 
-                    totalPages={totalInternationalPages} 
-                    onPageChange={handleInternationalPageChange} 
-                  />
+                  <motion.div variants={itemVariants}>
+                    <Pagination
+                      currentPage={currentPageInternational}
+                      totalPages={totalInternationalPages}
+                      onPageChange={handleInternationalPageChange}
+                    />
+                  </motion.div>
                 )}
-              </>
+              </motion.div>
             )}
-          </>
+          </motion.div>
         )}
-      </div>
+      </motion.section>
 
       {/* News Detail Modal */}
       {isModalOpen && selectedNews && (

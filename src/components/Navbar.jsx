@@ -97,8 +97,7 @@ const Navbar = () => {
             whileHover={{ opacity: 0.8 }}
             whileTap={{ scale: 0.98 }}
           >
-            <img src="https://res.cloudinary.com/dxbkwpm3i/image/upload/v1747146048/PilarSehat_2_riqncr.svg" alt="Logo" draggable="false" onContextMenu={(e) => e.preventDefault()} className="h-15" />
-            <p className="text-[#0be084] dark:text-[#ecfef7] font-bold text-3xl">PilarSehat</p>
+            <img src="https://res.cloudinary.com/dxbkwpm3i/image/upload/v1747231230/const_staggerVariants_hidden_opacity_0_visible_opacity_1_transition_staggerChildren_0.1_delayChildren_0.2_l60kgk.svg" alt="Logo" draggable="false" onContextMenu={(e) => e.preventDefault()} className="h-15" />
           </motion.a>
 
           {/* Center (Navigation + Search) */}

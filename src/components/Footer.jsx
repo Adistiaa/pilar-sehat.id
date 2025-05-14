@@ -59,7 +59,7 @@ const Footer = () => {
             variants={itemVariants}
             className="flex items-center mb-3"
           >
-            <img src="https://res.cloudinary.com/dxbkwpm3i/image/upload/v1747146048/PilarSehat_2_riqncr.svg" alt="PilarSehat Logo" className="h-40" />
+            <img src="https://res.cloudinary.com/dxbkwpm3i/image/upload/v1747231223/PilarSehat_4_eovrhn.svg" alt="PilarSehat Logo" className="h-35" draggable="false" loading="lazy" onContextMenu={(e) => e.preventDefault()} />
           </motion.div>
           <motion.p
             variants={itemVariants}

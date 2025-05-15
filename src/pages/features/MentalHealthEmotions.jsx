@@ -1,24 +1,84 @@
-import React, { useState, useEffect } from 'react';
-import { Brain } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Brain, Play, Pause, Ban, Clock } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import { motion } from 'framer-motion';
+import { Bar } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import ReactHowler from 'react-howler';
 
-const GEMINI_API_KEY = import.meta.env.VITE_URL; // Replace with your actual API key
-const NINJAS_API_KEY = import.meta.env.VITE_QUOTES; // Ganti dengan API key Anda dari api-ninjas.com
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+
+const GEMINI_API_KEY = import.meta.env.VITE_URL;
+const NINJAS_API_KEY = import.meta.env.VITE_QUOTES;
+
+const meditationThemes = [
+  { id: 'alam', name: 'Suara Alam', sound: '/sounds/alam.mp3' },
+  { id: 'frekuensi', name: 'Frekuensi Khusus', sound: '/sounds/frekuensi.mp3' },
+  { id: 'mangkuk', name: 'Suara Mangkuk Tibet', sound: '/sounds/mangkuk.mp3' },
+  { id: 'instrumental', name: 'Musik Instrumental', sound: '/sounds/instrumental.mp3' },
+  { id: 'mantra', name: 'Mantra / Om Chanting', sound: '/sounds/mantra.mp3' },
+];
+
+const meditationDurations = [
+  { value: 120, label: '2 Menit' },
+  { value: 300, label: '5 Menit' },
+  { value: 600, label: '10 Menit' },
+  { value: 900, label: '15 Menit' },
+  { value: 1800, label: '30 Menit' },
+];
+
+const sectionVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeInOut' } },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 10 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeInOut' } },
+};
+
+const staggerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1, delayChildren: 0.2 },
+  },
+};
+
+const LoadingState = () => (
+  <div className="text-center py-8">
+    <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-primary-500 mx-auto mb-3"></div>
+    <p className="text-gray-600 dark:text-gray-400">Memuat...</p>
+  </div>
+);
+
+const ErrorState = ({ message }) => (
+  <div className="text-center py-8">
+    <p className="text-red-500 dark:text-red-400 mb-3">{message}</p>
+    <button
+      onClick={() => window.location.reload()}
+      className="bg-secondary-500 hover:bg-secondary-600 text-white font-medium py-2 px-6 rounded-md"
+    >
+      Muat Ulang
+    </button>
+  </div>
+);
 
 function MentalHealthEmotions() {
   const [quizData, setQuizData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(-1);
   const [selectedAnswers, setSelectedAnswers] = useState({});
   const [showResults, setShowResults] = useState(false);
-  const [emotionScores, setEmotionScores] = useState({
+  const [finalEmotionScores, setFinalEmotionScores] = useState({
     ceria: 0,
     tenang: 0,
     marah: 0,
     cemas: 0,
     sedih: 0,
   });
+  const [emotionCategories, setEmotionCategories] = useState(null);
   const [aiAnalysis, setAiAnalysis] = useState(null);
   const [isAiLoading, setIsAiLoading] = useState(false);
   const [showAiAnalysisButton, setShowAiAnalysisButton] = useState(false);
@@ -29,18 +89,28 @@ function MentalHealthEmotions() {
   const [isAiRoastLoading, setIsAiRoastLoading] = useState(false);
   const [showAiRoastButton, setShowAiRoastButton] = useState(false);
 
+  // State untuk fitur meditasi
+  const [isMeditating, setIsMeditating] = useState(false);
+  const [selectedTheme, setSelectedTheme] = useState(meditationThemes[0]);
+  const [duration, setDuration] = useState(meditationDurations[1].value);
+  const [timeLeft, setTimeLeft] = useState(duration);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isFinished, setIsFinished] = useState(false);
+  const soundPlayer = useRef(null);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('/src/data/questions.json');
+        const response = await fetch('/data/questions.json');
         if (!response.ok) {
-          throw new Error('Failed to fetch quiz data');
+          throw new Error('Gagal memuat data kuesioner');
         }
         const data = await response.json();
-        setQuizData(data);
+        setQuizData(data.questions);
+        setEmotionCategories(data.emotionCategories);
         setLoading(false);
       } catch (err) {
-        setError('Failed to load quiz data. Please try again later.');
+        setError('Gagal memuat data kuesioner. Silakan coba lagi nanti.');
         setLoading(false);
       }
     };
@@ -53,63 +123,94 @@ function MentalHealthEmotions() {
       setQuotesLoading(true);
       setQuotesError(null);
       try {
-        const response = await fetch('https://api.api-ninjas.com/v1/quotes', { // Ambil 3 quotes
+        const response = await fetch('https://api.api-ninjas.com/v1/quotes', {
           headers: {
             'X-Api-Key': NINJAS_API_KEY,
           },
         });
         if (!response.ok) {
-          throw new Error(`Failed to fetch quotes: ${response.status}`);
+          throw new Error(`Gagal memuat kutipan: ${response.status}`);
         }
         const data = await response.json();
-        setQuotes(data);
+        setQuotes(data.sort(() => Math.random() - 0.5).slice(0, 3));
         setQuotesLoading(false);
       } catch (error) {
         console.error('Error fetching quotes:', error);
-        setQuotesError('Failed to load quotes.');
+        setQuotesError('Gagal memuat kutipan.');
         setQuotesLoading(false);
       }
     };
 
     fetchQuotes();
-  }, []); // Fetch quotes hanya sekali saat komponen mount
+  }, []);
+
+  useEffect(() => {
+    let intervalId;
+    if (isMeditating && isPlaying && timeLeft > 0) {
+      intervalId = setInterval(() => setTimeLeft(prevTime => prevTime - 1), 1000);
+    } else if (timeLeft === 0 && isMeditating) {
+      setIsPlaying(false);
+      setIsFinished(true);
+      setIsMeditating(false);
+      // Anda bisa menambahkan logika setelah meditasi selesai di sini jika perlu
+    }
+    return () => clearInterval(intervalId);
+  }, [isMeditating, isPlaying, timeLeft]);
+
+  const startQuiz = () => {
+    setCurrentQuestionIndex(0);
+    setIsMeditating(false); // Pastikan meditasi berhenti saat kuis dimulai
+    setIsPlaying(false);
+  };
 
   const handleOptionSelect = (option) => {
-    if (!quizData) return;
+    if (!quizData || !quizData[currentQuestionIndex]) return;
 
-    const currentQuestion = quizData.questions[currentQuestionIndex];
+    const currentQuestion = quizData[currentQuestionIndex];
     setSelectedAnswers({
       ...selectedAnswers,
       [currentQuestion.id]: option,
     });
 
-    const newScores = { ...emotionScores };
-    Object.entries(option.points).forEach(([emotion, point]) => {
-      newScores[emotion] += point;
-    });
-    setEmotionScores(newScores);
-
     setTimeout(() => {
-      if (currentQuestionIndex < quizData.questions.length - 1) {
+      if (currentQuestionIndex < quizData.length - 1) {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
       } else {
         setShowResults(true);
-        setShowAiAnalysisButton(true); // Show the AI analysis button after completing the quiz
-        setShowAiRoastButton(true); // Show the AI roast button
+        setShowAiAnalysisButton(true);
+        setShowAiRoastButton(true);
       }
     }, 300);
   };
 
+  useEffect(() => {
+    if (showResults && quizData) {
+      const calculatedScores = {
+        ceria: 0,
+        tenang: 0,
+        marah: 0,
+        cemas: 0,
+        sedih: 0,
+      };
+      Object.values(selectedAnswers).forEach(answer => {
+        Object.entries(answer.points).forEach(([emotion, point]) => {
+          calculatedScores[emotion] += point;
+        });
+      });
+      setFinalEmotionScores(calculatedScores);
+    }
+  }, [showResults, selectedAnswers, quizData]);
+
   const fetchAIAnalysis = async (scores) => {
     setIsAiLoading(true);
-    setShowAiAnalysisButton(false); // Hide the button while loading
+    setShowAiAnalysisButton(false);
     try {
       const prompt = `Analisis kondisi emosional berdasarkan skor berikut:
-        Keceriaan: ${scores.ceria}/30
-        Ketenangan: ${scores.tenang}/30
-        Kemarahan: ${scores.marah}/20
-        Kecemasan: ${scores.cemas}/20
-        Kesedihan: ${scores.sedih}/20
+        Keceriaan: ${scores.ceria}/100
+        Ketenangan: ${scores.tenang}/100
+        Kemarahan: ${scores.marah}/100
+        Kecemasan: ${scores.cemas}/100
+        Kesedihan: ${scores.sedih}/100
 
         Berikan analisis mendalam tentang kondisi emosional, serta berikan saran dan rekomendasi yang dapat membantu meningkatkan kesejahteraan mental. Jawaban dalam Bahasa Indonesia.`;
 
@@ -125,18 +226,18 @@ function MentalHealthEmotions() {
       if (!res.ok) {
         const errorBody = await res.json();
         console.error('AI API Error:', errorBody);
-        throw new Error(`Failed to get AI analysis: ${errorBody.error?.message || res.statusText}`);
+        throw new Error(`Gagal mendapatkan analisis AI: ${errorBody.error?.message || res.statusText}`);
       }
 
       const data = await res.json();
       if (data.candidates?.[0]?.content?.parts?.[0]) {
         setAiAnalysis(data.candidates[0].content.parts[0].text);
       } else {
-        throw new Error('Invalid AI response format');
+        throw new Error('Format respons AI tidak valid');
       }
     } catch (err) {
       console.error('Error fetching AI analysis:', err);
-      setError(`AI Analysis failed: ${err.message}`);
+      setError(`Analisis AI gagal: ${err.message}`);
       setAiAnalysis(null);
     } finally {
       setIsAiLoading(false);
@@ -145,14 +246,14 @@ function MentalHealthEmotions() {
 
   const fetchAIRoast = async (scores) => {
     setIsAiRoastLoading(true);
-    setShowAiRoastButton(false); // Hide the roast button while loading
+    setShowAiRoastButton(false);
     try {
       const prompt = `Berdasarkan skor emosi berikut:
-        Keceriaan: ${scores.ceria}/30
-        Ketenangan: ${scores.tenang}/30
-        Kemarahan: ${scores.marah}/20
-        Kecemasan: ${scores.cemas}/20
-        Kesedihan: ${scores.sedih}/20
+        Keceriaan: ${scores.ceria}/100
+        Ketenangan: ${scores.tenang}/100
+        Kemarahan: ${scores.marah}/100
+        Kecemasan: ${scores.cemas}/100
+        Kesedihan: ${scores.sedih}/100
 
         Berikan roasting singkat dan lucu (tapi jangan terlalu kasar atau menyakitkan) tentang kondisi emosional orang ini. Gunakan Bahasa Indonesia.`;
 
@@ -168,18 +269,18 @@ function MentalHealthEmotions() {
       if (!res.ok) {
         const errorBody = await res.json();
         console.error('AI Roast API Error:', errorBody);
-        throw new Error(`Failed to get AI roast: ${errorBody.error?.message || res.statusText}`);
+        throw new Error(`Gagal mendapatkan roasting AI: ${errorBody.error?.message || res.statusText}`);
       }
 
       const data = await res.json();
       if (data.candidates?.[0]?.content?.parts?.[0]) {
         setAiRoast(data.candidates[0].content.parts[0].text);
       } else {
-        throw new Error('Invalid AI roast response format');
+        throw new Error('Format respons roasting AI tidak valid');
       }
     } catch (err) {
       console.error('Error fetching AI roast:', err);
-      setError(`AI Roast failed: ${err.message}`);
+      setError(`Roasting AI gagal: ${err.message}`);
       setAiRoast(null);
     } finally {
       setIsAiRoastLoading(false);
@@ -187,10 +288,10 @@ function MentalHealthEmotions() {
   };
 
   const resetQuiz = () => {
-    setCurrentQuestionIndex(0);
+    setCurrentQuestionIndex(-1);
     setSelectedAnswers({});
     setShowResults(false);
-    setEmotionScores({
+    setFinalEmotionScores({
       ceria: 0,
       tenang: 0,
       marah: 0,
@@ -203,113 +304,238 @@ function MentalHealthEmotions() {
     setAiRoast(null);
     setIsAiRoastLoading(false);
     setShowAiRoastButton(false);
+    setIsMeditating(false);
+    setIsPlaying(false);
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mx-auto"></div>
-          <p className="mt-4 text-gray-700">Memuat kuesioner...</p>
-        </div>
-      </div>
-    );
-  }
+  // Fungsi-fungsi untuk fitur meditasi
+  const startMeditation = () => {
+    setIsMeditating(true);
+    setIsPlaying(true);
+    setTimeLeft(duration);
+    setIsFinished(false);
+    setCurrentQuestionIndex(-2); // Status khusus untuk meditasi
+    setShowResults(false);
+  };
 
-  if (error || !quizData) {
-    return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-        <div className="bg-white p-6 rounded-lg shadow-md max-w-md text-center">
-          <p className="text-red-500 mb-4">{error || 'Something went wrong'}</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-          >
-            Refresh
-          </button>
-        </div>
+  const pauseMeditation = () => setIsPlaying(false);
+  const resumeMeditation = () => setIsPlaying(true);
+  const endMeditation = () => {
+    setIsMeditating(false);
+    setIsPlaying(false);
+    setTimeLeft(duration);
+    setIsFinished(true);
+    setCurrentQuestionIndex(-1); // Kembali ke status awal kuis
+  };
+
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+  };
+
+  const renderMeditation = () => (
+    <motion.div
+      initial="hidden"
+      animate="visible"
+      variants={sectionVariants}
+      className="bg-[#f6fefc] dark:bg-[#010907] text-[#01130c] dark:text-[#ecfef7] rounded-lg shadow-lg p-8 max-w-xl mx-auto mt-10 text-center"
+    >
+      <h2 className="text-3xl font-bold mb-6">Sesi Meditasi</h2>
+      <p className="text-lg text-gray-700 dark:text-gray-300 mb-4">
+        Pilih tema dan durasi untuk memulai sesi meditasi Anda.
+      </p>
+      <div className="mb-4">
+        <label htmlFor="theme" className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
+          Pilih Tema:
+        </label>
+        <select
+          id="theme"
+          value={selectedTheme.id}
+          onChange={(e) => setSelectedTheme(meditationThemes.find(t => t.id === e.target.value))}
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline"
+        >
+          {meditationThemes.map(theme => (
+            <option key={theme.id} value={theme.id}>
+              {theme.name}
+            </option>
+          ))}
+        </select>
       </div>
-    );
-  }
+      <div className="mb-4">
+        <label htmlFor="duration" className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
+          Pilih Durasi:
+        </label>
+        <select
+          id="duration"
+          value={duration}
+          onChange={(e) => setDuration(parseInt(e.target.value))}
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline"
+        >
+          {meditationDurations.map(d => (
+            <option key={d.value} value={d.value}>
+              {d.label}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div className="timer text-2xl font-semibold mb-4">
+        <Clock className="inline-block mr-2 align-middle" /> {formatTime(timeLeft)}
+      </div>
+      <div className="controls flex justify-center space-x-4 mb-6">
+        {isPlaying ? (
+          <motion.button onClick={pauseMeditation} className="bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-2 px-4 rounded-full focus:outline-none focus:shadow-outline">
+            <Pause className="inline-block align-middle" /> Pause
+          </motion.button>
+        ) : (
+          <motion.button onClick={resumeMeditation} className="bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-full focus:outline-none focus:shadow-outline">
+            <Play className="inline-block align-middle" /> Lanjutkan
+          </motion.button>
+        )}
+        <motion.button onClick={endMeditation} className="bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-full focus:outline-none focus:shadow-outline">
+          <Ban className="inline-block align-middle" /> Akhiri
+        </motion.button>
+      </div>
+      <ReactHowler src={selectedTheme.sound} playing={isPlaying && isMeditating} loop={true} ref={soundPlayer} />
+      {isFinished && (
+        <div className="finished-message mt-6 text-gray-600 dark:text-gray-400">
+          Sesi meditasi selesai.
+        </div>
+      )}
+      <motion.button onClick={() => setCurrentQuestionIndex(-1)} className="bg-gradient-to-r from-[#50b7f7] to-[#1ff498] hover:from-[#1ff498] hover:to-[#50b7f7] text-[#01130c] font-semibold py-3 px-8 rounded-full transition-colors duration-300 shadow-md hover:shadow-[#50b7f7]/30 mt-4">
+        Kembali ke Kuesioner
+      </motion.button>
+    </motion.div>
+  );
 
   const renderResults = () => {
-    const dominantEmotion = Object.entries(emotionScores).reduce(
-      (max, [emotion, score]) => {
-        const normalized = (score / (emotion === 'ceria' || emotion === 'tenang' ? 30 : 20)) * 100;
-        return normalized > max.score ? { emotion, score: normalized } : max;
-      },
-      { emotion: 'none', score: 0 }
+    const dominantEmotion = Object.entries(finalEmotionScores).reduce(
+      (max, [emotion, score]) => (score > max.score ? { emotion, score } : max),
+      { emotion: 'none', score: -1 }
     ).emotion;
 
     const getEmotionCategory = (emotion, score) => {
-      const maxScore = emotion === 'ceria' || emotion === 'tenang' ? 30 : 20;
-      const percentage = (score / maxScore) * 100;
+      const percentage = (score / 100) * 100;
       return percentage < 33 ? 'low' : percentage < 66 ? 'medium' : 'high';
     };
 
+    const emotionData = Object.keys(finalEmotionScores).map(emotion => ({
+      emotion: emotion.charAt(0).toUpperCase() + emotion.slice(1),
+      score: Math.min(finalEmotionScores[emotion], 100), // Batasi skor untuk chart
+    }));
+
+    const chartData = {
+      labels: emotionData.map(data => data.emotion),
+      datasets: [
+        {
+          label: 'Skor Emosi',
+          data: emotionData.map(data => data.score),
+          backgroundColor: [
+            'rgba(255, 206, 86, 0.8)', // Ceria (Kuning)
+            'rgba(75, 192, 192, 0.8)', // Tenang (Hijau)
+            'rgba(255, 99, 132, 0.8)', // Marah (Merah)
+            'rgba(153, 102, 255, 0.8)', // Cemas (Ungu)
+            'rgba(54, 162, 235, 0.8)', // Sedih (Biru)
+          ],
+          borderColor: [
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(255, 99, 132, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(54, 162, 235, 1)',
+          ],
+          borderWidth: 1,
+        },
+      ],
+    };
+
+    const chartOptions = {
+      responsive: true,
+      plugins: {
+        legend: {
+          display: false,
+        },
+        title: {
+          display: true,
+          text: 'Skor Emosi Anda',
+          font: {
+            size: 16,
+          },
+          color: '#01130c',
+        },
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 100, // Tetapkan nilai maksimum chart menjadi 100
+          ticks: {
+            color: '#01130c',
+          },
+        },
+        x: {
+          ticks: {
+            color: '#01130c',
+          },
+        },
+      },
+    };
+
     return (
-      <div className="bg-white rounded-lg shadow-lg p-6 max-w-3xl mx-auto">
-        <h2 className="text-2xl font-bold text-center text-blue-600 mb-8">
-          <Brain className="inline-block mr-2 mb-1" />
-          Hasil Penilaian Emosi Anda
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={sectionVariants}
+        className="bg-[#f6fefc] dark:bg-[#010907] text-[#01130c] dark:text-[#ecfef7] rounded-lg shadow-lg p-8 max-w-3xl mx-auto mt-10"
+      >
+        <h2 className="text-3xl font-bold text-center mb-8">
+          <Brain className="inline-block mr-2 mb-1 text-[#1ff498] dark:text-[#0be084]" />
+          Hasil Penilaian Emosi
         </h2>
 
-        <div className="mb-8 p-6 bg-blue-50 rounded-lg border border-blue-100">
-          <h3 className="text-xl font-semibold mb-4">
+        <motion.div variants={itemVariants} className="mb-8 p-6 bg-[#e3fdf7] dark:bg-[#0a1a16] rounded-lg border border-[#c1f9ed] dark:border-[#07798d]">
+          <h3 className="text-xl font-semibold text-[#0be084] dark:text-[#1ff498] mb-4">
             Emosi Dominan:&nbsp;
-            <span className="ml-2 px-3 py-1 bg-blue-100 text-blue-800 rounded-full">
+            <span className="ml-2 px-3 py-1 bg-[#8ef2e0]/50 dark:bg-[#0b798d]/50 text-[#01130c] dark:text-[#ecfef7] rounded-full">
               {dominantEmotion.charAt(0).toUpperCase() + dominantEmotion.slice(1)}
             </span>
           </h3>
+          {emotionCategories[dominantEmotion] && (
+            <p className="text-[#01130c]/80 dark:text-[#ecfef7]/80 text-lg">
+              {emotionCategories[dominantEmotion][getEmotionCategory(dominantEmotion, finalEmotionScores[dominantEmotion])]}
+            </p>
+          )}
+        </motion.div>
 
-          <p className="text-gray-700 mb-2 text-lg">
-            {quizData.emotionCategories[dominantEmotion][getEmotionCategory(dominantEmotion, emotionScores[dominantEmotion])]}
-          </p>
-        </div>
+        <motion.div variants={itemVariants} className="mb-8">
+          <Bar data={chartData} options={chartOptions} />
+        </motion.div>
 
         <div className="space-y-6 mb-8">
-          {Object.entries(emotionScores).map(([emotion, score]) => {
+          <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-4">
+            Interpretasi Skor Emosi
+          </h3>
+          {Object.entries(finalEmotionScores).map(([emotion, score]) => {
             const category = getEmotionCategory(emotion, score);
-            const maxScore = emotion === 'ceria' || emotion === 'tenang' ? 30 : 20;
-            const percentage = (score / maxScore) * 100;
-
             return (
-              <div key={emotion} className="mb-6">
-                <div className="flex justify-between items-center mb-1">
-                  <span className="font-medium text-gray-700">
-                    {emotion.charAt(0).toUpperCase() + emotion.slice(1)}
-                  </span>
-                  <span className="text-sm text-gray-600">{score} poin</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
-                  <div
-                    className={`h-4 rounded-full transition-all duration-500 ease-out ${
-                      emotion === 'ceria'
-                        ? 'bg-yellow-400'
-                        : emotion === 'tenang'
-                        ? 'bg-green-400'
-                        : emotion === 'marah'
-                        ? 'bg-red-400'
-                        : emotion === 'cemas'
-                        ? 'bg-purple-400'
-                        : 'bg-blue-400'
-                    }`}
-                    style={{ width: `${percentage}%` }}
-                  ></div>
-                </div>
-                <p className="text-sm text-gray-600 mt-2">
-                  {quizData.emotionCategories[emotion][category]}
-                </p>
-              </div>
+              <motion.div key={emotion} variants={itemVariants} className="mb-4 p-4 bg-[#e3fdf7] dark:bg-[#0a1a16] rounded-lg border border-[#c1f9ed] dark:border-[#07798d]">
+                <h4 className="font-semibold text-[#0be084] dark:text-[#1ff498] mb-2">
+                  {emotion.charAt(0).toUpperCase() + emotion.slice(1)} ({Math.min(score, 100)}/100)
+                </h4>
+                {emotionCategories[emotion] && (
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    {emotionCategories[emotion][category]}
+                  </p>
+                )}
+              </motion.div>
             );
           })}
         </div>
 
         {showAiAnalysisButton && (
-          <div className="mt-8 text-center">
+          <motion.div variants={itemVariants} className="mt-8 text-center">
             <button
-              onClick={() => fetchAIAnalysis(emotionScores)}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-8 rounded-lg transition-colors duration-200"
+              onClick={() => fetchAIAnalysis(finalEmotionScores)}
+              className="bg-gradient-to-r from-[#1ff498] to-[#50b7f7] hover:from-[#50b7f7] hover:to-[#1ff498] text-[#01130c] font-medium py-3 px-8 rounded-full transition-colors duration-300 disabled:opacity-50"
               disabled={isAiLoading}
             >
               {isAiLoading ? (
@@ -318,17 +544,17 @@ function MentalHealthEmotions() {
                   Menganalisis...
                 </div>
               ) : (
-                'Dapatkan Analisis AI'
+                'Analisis Lebih Lanjut'
               )}
             </button>
-          </div>
+          </motion.div>
         )}
 
         {showAiRoastButton && (
-          <div className="mt-4 text-center">
+          <motion.div variants={itemVariants} className="mt-4 text-center">
             <button
-              onClick={() => fetchAIRoast(emotionScores)}
-              className="bg-red-500 hover:bg-red-600 text-white font-medium py-3 px-8 rounded-lg transition-colors duration-200"
+              onClick={() => fetchAIRoast(finalEmotionScores)}
+              className="bg-[#ff6b6b] hover:bg-[#e04f4f] text-white font-medium py-3 px-8 rounded-full transition-colors duration-300 disabled:opacity-50"
               disabled={isAiRoastLoading}
             >
               {isAiRoastLoading ? (
@@ -337,129 +563,200 @@ function MentalHealthEmotions() {
                   Me-roasting...
                 </div>
               ) : (
-                'Roast Me AI!'
+                'Isengin AI (Roast Me!)'
               )}
             </button>
-          </div>
+          </motion.div>
         )}
 
         {isAiLoading && !aiAnalysis && !error && (
-          <div className="mt-8 p-6 bg-gray-50 rounded-lg">
+          <motion.div variants={itemVariants} className="mt-8 p-6 bg-[#e3fdf7] dark:bg-[#0a1a16] rounded-lg text-center">
             <div className="flex items-center justify-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
-              <span className="ml-3 text-gray-600">Menganalisis hasil...</span>
+              <div className="animate-spin rounded-full h-8 w-8 border-t-4 border-b-4 border-[#1ff498] mr-3"></div>
+              <span className="text-gray-600 dark:text-gray-400">Menganalisis hasil...</span>
             </div>
-          </div>
+          </motion.div>
         )}
 
         {aiAnalysis && (
-          <div className="mt-8 p-6 bg-gray-50 rounded-lg">
-            <h3 className="text-xl font-semibold mb-4">Analisis AI</h3>
-            <div className="prose prose-blue max-w-none">
+          <motion.div variants={itemVariants} className="mt-8 p-6 bg-[#e3fdf7] dark:bg-[#0a1a16] rounded-lg border border-[#c1f9ed] dark:border-[#07798d]">
+            <h3 className="text-xl font-semibold text-[#0be084] dark:text-[#1ff498] mb-4">Analisis AI</h3>
+            <div className="prose prose-sm sm:prose dark:prose-invert max-w-none">
               <ReactMarkdown>{aiAnalysis}</ReactMarkdown>
             </div>
-          </div>
+          </motion.div>
         )}
 
         {isAiRoastLoading && !aiRoast && !error && (
-          <div className="mt-4 p-6 bg-gray-50 rounded-lg">
+          <motion.div variants={itemVariants} className="mt-4 p-6 bg-[#e3fdf7] dark:bg-[#0a1a16] rounded-lg text-center">
             <div className="flex items-center justify-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-red-500"></div>
-              <span className="ml-3 text-gray-600">Memproses roasting...</span>
+              <div className="animate-spin rounded-full h-8 w-8 border-t-4 border-b-4 border-[#ff6b6b] mr-3"></div>
+              <span className="text-gray-600 dark:text-gray-400">Memproses roasting...</span>
             </div>
-          </div>
+          </motion.div>
         )}
 
         {aiRoast && (
-          <div className="mt-4 p-6 bg-gray-50 rounded-lg">
-            <h3 className="text-xl font-semibold mb-4">AI Roasting</h3>
-            <div className="prose prose-red max-w-none">
+          <motion.div variants={itemVariants} className="mt-4 p-6 bg-[#e3fdf7] dark:bg-[#0a1a16] rounded-lg border border-[#c1f9ed] dark:border-[#07798d]">
+            <h3 className="text-xl font-semibold text-[#ff6b6b] mb-4">AI Roasting</h3>
+            <div className="prose prose-sm sm:prose dark:prose-invert max-w-none">
               <ReactMarkdown>{aiRoast}</ReactMarkdown>
             </div>
-          </div>
+          </motion.div>
         )}
 
-        <div className="mt-8 text-center">
+        <motion.div variants={itemVariants} className="mt-8 text-center">
           <button
             onClick={resetQuiz}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-8 rounded-lg transition-colors duration-200"
+            className="bg-gradient-to-r from-[#1ff498] to-[#50b7f7] hover:from-[#50b7f7] hover:to-[#1ff498] text-[#01130c] font-medium py-3 px-8 rounded-full transition-colors duration-300"
           >
-            Mulai Lagi
+            Coba Lagi
           </button>
-          </div>
-      </div>
+        </motion.div>
+      </motion.div>
     );
   };
 
   const renderQuestion = () => {
-    const currentQuestion = quizData.questions[currentQuestionIndex];
-    const progress = ((currentQuestionIndex + 1) / quizData.questions.length) * 100;
+    if (!quizData || !quizData[currentQuestionIndex]) return null;
+
+    const currentQuestion = quizData[currentQuestionIndex];
+    const progress = ((currentQuestionIndex + 1) / quizData.length) * 100;
 
     return (
-      <div className="bg-white rounded-lg shadow-lg p-6 max-w-2xl mx-auto">
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={sectionVariants}
+        className="bg-[#f6fefc] dark:bg-[#010907] text-[#01130c] dark:text-[#ecfef7] rounded-lg shadow-lg p-8 max-w-2xl mx-auto mt-10"
+      >
         <div className="mb-6">
-          <div className="w-full bg-gray-200 rounded-full h-2">
+          <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
             <div
-              className="bg-blue-600 h-2 rounded-full transition-all duration-300 ease-out"
+              className="bg-gradient-to-r from-[#1ff498] to-[#50b7f7] h-3 rounded-full transition-all duration-300 ease-out"
               style={{ width: `${progress}%` }}
             ></div>
           </div>
-          <div className="flex justify-between text-sm text-gray-600 mt-1">
+          <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 mt-2">
             <span>
-              Pertanyaan {currentQuestionIndex + 1} dari {quizData.questions.length}
+              Pertanyaan {currentQuestionIndex + 1} dari {quizData.length}
             </span>
-            <span>{Math.round(progress)}% selesai</span>
+            <span>{Math.round(progress)}%</span>
           </div>
         </div>
 
-        <h2 className="text-xl font-semibold text-gray-800 mb-6">{currentQuestion.question}</h2>
+        <h2 className="text-xl font-semibold mb-6">{currentQuestion.question}</h2>
 
         <div className="space-y-3">
           {currentQuestion.options.map((option, index) => (
-            <button
+            <motion.button
               key={index}
+              variants={itemVariants}
               onClick={() => handleOptionSelect(option)}
-              className="w-full text-left p-4 border border-gray-300 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors duration-200 hover:shadow-sm"
+              className="w-full text-left p-4 border border-[#72e4f8] dark:border-[#07798d] rounded-lg hover:bg-[#e3fdf7] dark:hover:bg-[#0a1a16] hover:border-[#1ff498] dark:hover:border-[#0be084] transition-colors duration-200 shadow-sm"
             >
               {option.text}
-            </button>
+            </motion.button>
           ))}
         </div>
 
-        {/* Menampilkan 3 Kutipan dalam Bentuk Card */}
-        <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
-          {quotesLoading && (
-            <div className="col-span-3 text-center text-gray-500">Memuat kutipan...</div>
-          )}
-          {quotesError && (
-            <div className="col-span-3 text-center text-red-500">{quotesError}</div>
-          )}
-          {quotes.map((quoteItem, index) => (
-            <div key={index} className="bg-gray-100 rounded-lg shadow-md p-4 text-center">
-              <p className="text-sm italic text-gray-700">"{quoteItem.quote}"</p>
-              {quoteItem.author && <p className="text-xs text-gray-600 mt-2">- {quoteItem.author}</p>}
-            </div>
-          ))}
-        </div>
-      </div>
+        {!quotesLoading && !quotesError && quotes.length > 0 && (
+          <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+            {quotes.map((quoteItem, index) => (
+              <motion.div
+                key={index}
+                variants={itemVariants}
+                className="bg-[#e3fdf7] dark:bg-[#0a1a16] rounded-lg shadow-md p-4 text-center border border-[#c1f9ed] dark:border-[#07798d]"
+              >
+                <p className="text-sm italic text-gray-700 dark:text-gray-300">"{quoteItem.quote}"</p>
+                {quoteItem.author && (
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">- {quoteItem.author}</p>
+                )}
+              </motion.div>
+            ))}
+          </div>
+        )}
+        {quotesLoading && (
+          <div className="mt-10 text-center text-gray-500 dark:text-gray-400">Memuat kutipan...</div>
+        )}
+        {quotesError && (
+          <div className="mt-10 text-center text-red-500 dark:text-red-400">{quotesError}</div>
+        )}
+      </motion.div>
     );
   };
 
-  return (
-    <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6">
-      <div className="max-w-3xl mx-auto mb-10 text-center">
-        <h1 className="text-3xl font-bold text-gray-900 mb-3">
-          <Brain className="inline-block mr-2 mb-1" />
-          Penilaian Kesehatan Mental dan Emosi
-        </h1>
-        <p className="text-gray-600 max-w-xl mx-auto">
-          Jawab pertanyaan-pertanyaan berikut untuk mengevaluasi kondisi emosional Anda saat ini. Kuesioner ini
-          membantu Anda memahami emosi dominan yang Anda rasakan.
-        </p>
-      </div>
+  const renderStartQuiz = () => (
+    <motion.div
+      initial="hidden"
+      animate="visible"
+      variants={sectionVariants}
+      className="bg-[#f6fefc] dark:bg-[#010907] text-[#01130c] dark:text-[#ecfef7] rounded-lg shadow-lg p-8 max-w-xl mx-auto mt-10 text-center"
+    >
+      <h2 className="text-3xl font-bold mb-6">Siap Menguji Emosimu?</h2>
+      <p className="text-lg text-gray-700 dark:text-gray-300 mb-8">
+        Tekan tombol di bawah untuk memulai kuesioner dan mendapatkan wawasan tentang kondisi emosional Anda saat ini.
+      </p>
+      <motion.button
+        onClick={startQuiz}
+        className="bg-gradient-to-r from-[#1ff498] to-[#50b7f7] hover:from-[#50b7f7] hover:to-[#1ff498] text-[#01130c] font-semibold py-4 px-10 rounded-full transition-colors duration-300 shadow-md hover:shadow-[#1ff498]/30"
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        Mulai Kuesioner
+      </motion.button>
+      <motion.button
+        onClick={startMeditation}
+        className="mt-4 bg-gradient-to-r from-[#a78bfa] to-[#818cf8] hover:from-[#818cf8] hover:to-[#a78bfa] text-white font-semibold py-3 px-8 rounded-full transition-colors duration-300 shadow-md hover:shadow-[#a78bfa]/30"
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        Mulai Meditasi
+      </motion.button>
+      {!quotesLoading && !quotesError && quotes.length > 0 && (
+        <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+          {quotes.map((quoteItem, index) => (
+            <motion.div
+              key={index}
+              variants={itemVariants}
+              className="bg-[#e3fdf7] dark:bg-[#0a1a16] rounded-lg shadow-md p-4 text-center border border-[#c1f9ed] dark:border-[#07798d]"
+            >
+              <p className="text-sm italic text-gray-700 dark:text-gray-300">"{quoteItem.quote}"</p>
+              {quoteItem.author && (
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">- {quoteItem.author}</p>
+              )}
+            </motion.div>
+          ))}
+        </div>
+      )}
+      {quotesLoading && (
+        <div className="mt-10 text-center text-gray-500 dark:text-gray-400">Memuat kutipan...</div>
+      )}
+      {quotesError && (
+        <div className="mt-10 text-center text-red-500 dark:text-red-400">{quotesError}</div>
+      )}
+    </motion.div>
+  );
 
-      {showResults ? renderResults() : renderQuestion()}
-    </div>
+  return (
+    <motion.div
+      className="bg-[#f6fefc] dark:bg-[#010907] text-[#01130c] dark:text-[#ecfef7] min-h-screen py-12 px-4 sm:px-6"
+      initial="hidden"
+      animate="visible"
+      variants={staggerVariants}
+    >
+      <motion.div variants={itemVariants} className="max-w-3xl mx-auto mb-10 text-center">
+        <h1 className="text-3xl font-bold text-[#0be084] dark:text-[#1ff498] mb-3">
+          <Brain className="inline-block mr-2 mb-1 text-[#50b7f7] dark:text-[#72e4f8]" />
+          Kenali Emosimu Lebih Baik
+        </h1>
+        <p className="text-[#01130c]/70 dark:text-[#ecfef7]/70 max-w-xl mx-auto">
+          Jawab pertanyaan-pertanyaan berikut untuk mendapatkan pemahaman yang lebih dalam tentang kondisi emosional Anda saat ini. Atau, coba sesi meditasi singkat untuk menenangkan pikiran.
+        </p>
+      </motion.div>
+
+      {currentQuestionIndex === -2 ? renderMeditation() : currentQuestionIndex === -1 ? renderStartQuiz() : showResults ? renderResults() : renderQuestion()}
+    </motion.div>
   );
 }
 

@@ -32,6 +32,10 @@ import {
   Activity,
   Circle,
   PieChart,
+  Target,
+  AreaChart,
+  Footprints,
+  Flower
 } from "lucide-react";
 import { Line, Pie, Bar } from "react-chartjs-2";
 import {
@@ -45,6 +49,7 @@ import {
   Legend,
   ArcElement,
   BarElement,
+
 } from "chart.js";
 
 ChartJS.register(
@@ -57,6 +62,7 @@ ChartJS.register(
   Legend,
   ArcElement,
   BarElement
+  
 );
 
 // Fixing default marker icon issue with Leaflet in React
@@ -284,6 +290,296 @@ const WeatherDisplay = ({ weatherData }) => {
     </div>
   );
 };
+
+const SoilImpactCalculator = ({ sectionVariants, itemVariants }) => {
+  const [luasLahan, setLuasLahan] = useState(""); // dalam meter persegi
+  const [praktikTerpilih, setPraktikTerpilih] = useState([]);
+  const [hasilDampak, setHasilDampak] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const practices = [
+    { id: "kompos", name: "Penambahan Kompos/Pupuk Organik", unit: "kg/tahun" },
+    { id: "coverCrop", name: "Penanaman Tanaman Penutup (Cover Crop)", unit: "bulan/tahun" },
+    { id: "noTill", name: "Tanpa Olah Tanah (No-Till)", unit: "" },
+    { id: "rotasiTanaman", name: "Rotasi Tanaman", unit: "" },
+    { id: "biochar", name: "Penggunaan Biochar", unit: "kg/tahun" },
+  ];
+
+  const calculateImpact = () => {
+    setIsLoading(true);
+    setError(null);
+    if (!luasLahan || isNaN(luasLahan) || parseFloat(luasLahan) <= 0) {
+      setError("Mohon masukkan luas lahan yang valid (angka positif).");
+      setHasilDampak(null);
+      setIsLoading(false);
+      return;
+    }
+    if (praktikTerpilih.length === 0) {
+      setError("Pilih setidaknya satu praktik pengelolaan tanah.");
+      setHasilDampak(null);
+      setIsLoading(false);
+      return;
+    }
+
+    const luasM2 = parseFloat(luasLahan);
+
+    let karbonTerserapKgCO2 = 0; // kg CO2 ekuivalen
+    let penghematanAirLiterPerM2 = 0; // liter per meter persegi
+    let peningkatanKeanekaragamanHayat = 0; // Skala 0-100
+
+    praktikTerpilih.forEach(practice => {
+      const { id, value } = practice;
+      const val = parseFloat(value);
+
+      // Faktor simulasi (ini adalah angka fiktif untuk demonstrasi)
+      // Dalam aplikasi nyata, ini harus didasarkan pada data ilmiah yang akurat
+      switch (id) {
+        case "kompos":
+          // Setiap kg kompos bisa menyerap X kg CO2 dan meningkatkan retensi air
+          karbonTerserapKgCO2 += (val || 0) * 0.5; // Misal: 0.5 kg CO2 per kg kompos
+          penghematanAirLiterPerM2 += (val || 0) * 0.01; // Misal: 0.01 liter per kg kompos
+          peningkatanKeanekaragamanHayat += 2; // Peningkatan skala
+          break;
+        case "coverCrop":
+          // Setiap bulan cover crop per m2 bisa menyerap Y kg CO2 dan retensi air
+          karbonTerserapKgCO2 += (val || 0) * luasM2 * 0.002; // Misal: 0.002 kg CO2 per m2 per bulan
+          penghematanAirLiterPerM2 += (val || 0) * 0.05; // Misal: 0.05 liter per m2 per bulan
+          peningkatanKeanekaragamanHayat += 3;
+          break;
+        case "noTill":
+          // Tanpa olah tanah menyerap Z kg CO2 per m2
+          karbonTerserapKgCO2 += luasM2 * 0.01; // Misal: 0.01 kg CO2 per m2
+          penghematanAirLiterPerM2 += 0.2;
+          peningkatanKeanekaragamanHayat += 4;
+          break;
+        case "rotasiTanaman":
+          // Rotasi tanaman menyerap A kg CO2 per m2
+          karbonTerserapKgCO2 += luasM2 * 0.005; // Misal: 0.005 kg CO2 per m2
+          penghematanAirLiterPerM2 += 0.1;
+          peningkatanKeanekaragamanHayat += 3;
+          break;
+        case "biochar":
+            // Setiap kg biochar bisa menyerap B kg CO2
+            karbonTerserapKgCO2 += (val || 0) * 1.5; // Biochar sangat efektif menyerap karbon
+            penghematanAirLiterPerM2 += (val || 0) * 0.02;
+            peningkatanKeanekaragamanHayat += 2;
+            break;
+        default:
+          break;
+      }
+    });
+
+    // Sesuaikan dampak total berdasarkan luas lahan
+    karbonTerserapKgCO2 = karbonTerserapKgCO2 * luasM2;
+    penghematanAirLiterPerM2 = penghematanAirLiterPerM2 * luasM2;
+
+    // Batasi peningkatan keanekaragaman hayati
+    peningkatanKeanekaragamanHayat = Math.min(peningkatanKeanekaragamanHayat, 100);
+
+    // Simulasi penundaan untuk UX
+    setTimeout(() => {
+      setHasilDampak({
+        karbonTerserap: karbonTerserapKgCO2,
+        penghematanAir: penghematanAirLiterPerM2,
+        keanekaragamanHayat: peningkatanKeanekaragamanHayat,
+        pesan: `Dengan luas lahan ${luasLahan} m² dan praktik yang Anda terapkan, Anda berkontribusi signifikan pada kesehatan lingkungan!`,
+      });
+      setIsLoading(false);
+    }, 1000);
+  };
+
+  const handlePracticeChange = (e) => {
+    const { value, checked } = e.target;
+    if (checked) {
+      setPraktikTerpilih([...praktikTerpilih, { id: value, value: "" }]);
+    } else {
+      setPraktikTerpilih(praktikTerpilih.filter(p => p.id !== value));
+    }
+    setHasilDampak(null); // Reset hasil jika praktik berubah
+    setError(null);
+  };
+
+  const handlePracticeValueChange = (id, val) => {
+    setPraktikTerpilih(praktikTerpilih.map(p =>
+      p.id === id ? { ...p, value: val } : p
+    ));
+  };
+
+
+  return (
+    <motion.section
+      variants={sectionVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.2 }}
+      className="bg-[#f6fefc] dark:bg-[#010907] border-2 border-[#72e4f8] dark:border-[#07798d] hover:border-[#1ff498] dark:hover:border-[#0be084] p-8 rounded-2xl shadow-sm hover:shadow-md transition-all space-y-6"
+    >
+      <motion.div
+        variants={itemVariants}
+        className="inline-block bg-[#67e8f9]/20 dark:bg-[#06b6d4]/20 text-[#01130c] dark:text-[#ecfef7] px-4 py-1 rounded-full mb-4"
+      >
+        <span className="flex items-center text-sm font-medium">
+          <Target className="w-4 h-4 mr-2" />
+          Kalkulator Dampak Kesehatan Tanah
+        </span>
+      </motion.div>
+
+      <motion.h2 variants={itemVariants} className="text-2xl font-bold text-[#01130c] dark:text-[#ecfef7] mb-4">
+        Hitung Dampak Positif Upaya Anda!
+      </motion.h2>
+
+      <motion.p variants={itemVariants} className="text-[#01130c]/70 dark:text-[#ecfef7]/70 mb-6">
+        Estimasi kontribusi Anda terhadap lingkungan dengan praktik pengelolaan tanah yang berkelanjutan.
+      </motion.p>
+
+      {/* Input Luas Lahan */}
+      <motion.div variants={itemVariants} className="mb-4">
+        <label htmlFor="luasLahan" className="block text-sm font-medium text-[#01130c] dark:text-[#ecfef7] mb-2">
+          Luas Lahan yang Dikelola (m²):
+        </label>
+        <input
+          type="number"
+          id="luasLahan"
+          value={luasLahan}
+          onChange={(e) => {
+            setLuasLahan(e.target.value);
+            setHasilDampak(null); // Reset hasil saat input berubah
+            setError(null);
+          }}
+          placeholder="Contoh: 1000"
+          className="w-full p-2 border border-[#b2ebf2] dark:border-[#4dd0e1]/30 rounded-md bg-[#e0f7fa] dark:bg-[#00acc1]/20 text-[#01130c] dark:text-[#ecfef7] focus:ring-[#1ff498] focus:border-[#1ff498] outline-none transition-all"
+        />
+      </motion.div>
+
+      {/* Pilihan Praktik */}
+      <motion.div variants={itemVariants} className="mb-6">
+        <h3 className="text-lg font-semibold text-[#01130c] dark:text-[#ecfef7] mb-3">Pilih Praktik yang Anda Lakukan:</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          {practices.map(practice => (
+            <div key={practice.id} className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                id={practice.id}
+                value={practice.id}
+                checked={praktikTerpilih.some(p => p.id === practice.id)}
+                onChange={handlePracticeChange}
+                className="form-checkbox h-5 w-5 text-[#1ff498] rounded focus:ring-[#1ff498] transition-all"
+              />
+              <label htmlFor={practice.id} className="text-sm font-medium text-[#01130c] dark:text-[#ecfef7] flex-grow">
+                {practice.name}
+              </label>
+              {praktikTerpilih.some(p => p.id === practice.id) && practice.unit && (
+                <input
+                  type="number"
+                  placeholder={`Jumlah ${practice.unit}`}
+                  value={praktikTerpilih.find(p => p.id === practice.id)?.value || ""}
+                  onChange={(e) => handlePracticeValueChange(practice.id, e.target.value)}
+                  className="w-24 p-1 border border-[#b2ebf2] dark:border-[#4dd0e1]/30 rounded-md bg-[#e0f7fa] dark:bg-[#00acc1]/20 text-[#01130c] dark:text-[#ecfef7] text-xs focus:ring-[#1ff498] focus:border-[#1ff498] outline-none transition-all"
+                />
+              )}
+            </div>
+          ))}
+        </div>
+      </motion.div>
+
+      {error && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-red-500/10 dark:bg-red-400/10 text-red-700 dark:text-red-300 p-3 rounded-md mb-4 text-sm flex items-center"
+        >
+          <AlertTriangle className="w-5 h-5 mr-2" />
+          {error}
+        </motion.div>
+      )}
+
+      {/* Tombol Hitung */}
+      <motion.button
+        variants={itemVariants}
+        onClick={calculateImpact}
+        disabled={isLoading}
+        className="w-full bg-[#1ff498] dark:bg-[#0be084] text-[#01130c] dark:text-white py-3 rounded-lg font-semibold text-lg hover:bg-[#0be084] dark:hover:bg-[#1ff498] transition-all duration-300 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {isLoading ? (
+          <>
+            <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+            Menghitung Dampak...
+          </>
+        ) : (
+          <>
+            <AreaChart className="w-5 h-5 mr-2" />
+            Hitung Dampak
+          </>
+        )}
+      </motion.button>
+
+      {/* Hasil Dampak */}
+      <AnimatePresence>
+        {hasilDampak && (
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            variants={sectionVariants} // Gunakan variants yang sama untuk fade in/out
+            className="mt-8 p-6 bg-[#e0f7fa] dark:bg-[#00acc1]/20 border border-[#b2ebf2] dark:border-[#4dd0e1]/30 rounded-lg shadow-inner space-y-4"
+          >
+            <motion.h3 variants={itemVariants} className="text-xl font-bold text-[#01130c] dark:text-[#ecfef7] text-center mb-4">
+              Ringkasan Dampak Lingkungan Anda
+            </motion.h3>
+
+            <motion.p variants={itemVariants} className="text-base text-[#01130c]/80 dark:text-[#ecfef7]/80 text-center mb-6">
+              {hasilDampak.pesan}
+            </motion.p>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* Kartu Dampak Karbon */}
+              <motion.div variants={itemVariants} className="bg-[#b2ebf2]/30 dark:bg-[#00acc1]/30 p-4 rounded-lg flex flex-col items-center text-center shadow-sm">
+                <Footprints className="w-8 h-8 text-[#07798d] dark:text-[#67e8f9] mb-2" />
+                <p className="text-sm text-[#01130c]/70 dark:text-[#ecfef7]/70">Karbon Terserap</p>
+                <p className="text-xl font-bold text-[#01130c] dark:text-[#ecfef7]">
+                  {hasilDampak.karbonTerserap.toFixed(2)} kg CO₂e
+                </p>
+                <p className="text-xs text-[#01130c]/60 dark:text-[#ecfef7]/60 mt-1">
+                  ~ Setara dengan {Math.round(hasilDampak.karbonTerserap / 22)} pohon muda/tahun
+                </p>
+              </motion.div>
+
+              {/* Kartu Dampak Air */}
+              <motion.div variants={itemVariants} className="bg-[#b2ebf2]/30 dark:bg-[#00acc1]/30 p-4 rounded-lg flex flex-col items-center text-center shadow-sm">
+                <Droplets className="w-8 h-8 text-[#07798d] dark:text-[#67e8f9] mb-2" />
+                <p className="text-sm text-[#01130c]/70 dark:text-[#ecfef7]/70">Penghematan Air</p>
+                <p className="text-xl font-bold text-[#01130c] dark:text-[#ecfef7]">
+                  {hasilDampak.penghematanAir.toFixed(2)} Liter
+                </p>
+                <p className="text-xs text-[#01130c]/60 dark:text-[#ecfef7]/60 mt-1">
+                  ~ Meningkatkan kapasitas retensi air tanah
+                </p>
+              </motion.div>
+
+              {/* Kartu Dampak Keanekaragaman Hayati */}
+              <motion.div variants={itemVariants} className="bg-[#b2ebf2]/30 dark:bg-[#00acc1]/30 p-4 rounded-lg flex flex-col items-center text-center shadow-sm">
+                <Flower className="w-8 h-8 text-[#07798d] dark:text-[#67e8f9] mb-2" />
+                <p className="text-sm text-[#01130c]/70 dark:text-[#ecfef7]/70">Keanekaragaman Hayati</p>
+                <p className="text-xl font-bold text-[#01130c] dark:text-[#ecfef7]">
+                  +{hasilDampak.keanekaragamanHayat.toFixed(0)}%
+                </p>
+                <p className="text-xs text-[#01130c]/60 dark:text-[#ecfef7]/60 mt-1">
+                  ~ Peningkatan kesehatan dan ekosistem tanah
+                </p>
+              </motion.div>
+            </div>
+
+            <motion.p variants={itemVariants} className="text-sm text-center text-[#01130c]/60 dark:text-[#ecfef7]/60 pt-4">
+              *Estimasi ini berdasarkan model sederhana. Hasil aktual dapat bervariasi.
+            </motion.p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.section>
+  );
+};
+
 
 function EnvironmentalHealth() {
   const [location, setLocation] = useState(null);
@@ -543,26 +839,23 @@ function EnvironmentalHealth() {
     };
 
     try {
-      const prompt = `Analisis kondisi kualitas udara saat ini di ${
-        location.name || "lokasi terpilih"
-      } berdasarkan data berikut:
-Cuaca: ${weatherData.weather[0].description}, Suhu ${
-        weatherData.main.temp
-      }°C (terasa ${weatherData.main.feels_like}°C), Kelembaban ${
-        weatherData.main.humidity
-      }%, Angin ${weatherData.wind.speed} m/s.
+      const prompt = `Analisis kondisi kualitas udara saat ini di ${location.name || "lokasi terpilih"
+        } berdasarkan data berikut:
+Cuaca: ${weatherData.weather[0].description}, Suhu ${weatherData.main.temp
+        }°C (terasa ${weatherData.main.feels_like}°C), Kelembaban ${weatherData.main.humidity
+        }%, Angin ${weatherData.wind.speed} m/s.
 Indeks Kualitas Udara (AQI): ${pollutionData.main.aqi} (${getAqiInfoLocal(
-        pollutionData.main.aqi
-      )})
+          pollutionData.main.aqi
+        )})
 Komponen Polutan (μg/m³): CO: ${pollutionData.components.co.toFixed(
-        2
-      )}, NO₂: ${pollutionData.components.no2.toFixed(
-        2
-      )}, O₃: ${pollutionData.components.o3.toFixed(
-        2
-      )}, PM2.5: ${pollutionData.components.pm2_5.toFixed(
-        2
-      )}, PM10: ${pollutionData.components.pm10.toFixed(2)}.
+          2
+        )}, NO₂: ${pollutionData.components.no2.toFixed(
+          2
+        )}, O₃: ${pollutionData.components.o3.toFixed(
+          2
+        )}, PM2.5: ${pollutionData.components.pm2_5.toFixed(
+          2
+        )}, PM10: ${pollutionData.components.pm10.toFixed(2)}.
 
 Berikan Penilaian Udara beserta Penjelasan Singkat dan jelas mengenai Risiko Kesehatan serta Rekomendasi yang perlu dilakukan.`;
 
@@ -580,8 +873,7 @@ Berikan Penilaian Udara beserta Penjelasan Singkat dan jelas mengenai Risiko Kes
         const errorBody = await res.json();
         console.error("AI API Error:", errorBody);
         throw new Error(
-          `Gagal mengambil analisis AI: ${
-            errorBody.error?.message || res.statusText
+          `Gagal mengambil analisis AI: ${errorBody.error?.message || res.statusText
           }`
         );
       }
@@ -637,8 +929,7 @@ Berikan Penilaian Udara beserta Penjelasan Singkat dan jelas mengenai Risiko Kes
     if (location && markerRef.current) {
       markerRef.current.setLatLng([location.lat, location.lon]);
       markerRef.current.setPopupContent(
-        `<b>${
-          location.name || "Lokasi Terpilih"
+        `<b>${location.name || "Lokasi Terpilih"
         }</b><br>Lat: ${location.lat.toFixed(4)}, Lon: ${location.lon.toFixed(
           4
         )}`
@@ -781,6 +1072,7 @@ Berikan Penilaian Udara beserta Penjelasan Singkat dan jelas mengenai Risiko Kes
       initialDataSampahPerDaerah
     );
     const [isLoading, setIsLoading] = useState(true);
+    const isDataFetched = useRef(false);
     const hasLoaded = useRef(false);
     const sectionVariants = {
       hidden: { opacity: 0, y: 30 },
@@ -813,9 +1105,10 @@ Berikan Penilaian Udara beserta Penjelasan Singkat dan jelas mengenai Risiko Kes
     };
 
     useEffect(() => {
-      if (!hasLoaded.current) {
+      if (!isDataFetched.current) {
         // Simulasi pemanggilan data (hanya dijalankan sekali)
-        setTimeout(() => {
+        const fetchData = async () => {
+
           const colorfulDataTotalSampah = {
             labels: [
               "2019",
@@ -898,18 +1191,21 @@ Berikan Penilaian Udara beserta Penjelasan Singkat dan jelas mengenai Risiko Kes
           setDataTotalSampah(colorfulDataTotalSampah);
           setDataSumberSampah(colorfulDataSumberSampah);
           setDataSampahPerDaerah(colorfulDataSampahPerDaerah);
-          setIsLoading(false);
-          hasLoaded.current = true;
-        }, 1000);
+          setIsLoading(false); // Set loading ke false setelah data berhasil dimuat
+          isDataFetched.current = true; // Set flag menjadi true
+        };
+
+        fetchData();
       }
-    }, []);
+    }, []); // Dependensi array tetap kosong
+
 
     return (
       <motion.section
         variants={sectionVariants}
-        initial="visible"
+        initial="hidden" // UBAH: Mulai dari hidden
         whileInView="visible"
-        viewport={{ once: true }}
+        viewport={{ once: true, amount: 0.2 }} // TAMBAH: `amount` untuk presisi pemicu
         className="bg-[#f6fefc] dark:bg-[#010907] border-2 border-[#72e4f8] dark:border-[#07798d] hover:border-[#1ff498] dark:hover:border-[#0be084] p-8 rounded-2xl shadow-sm hover:shadow-md transition-all space-y-6"
       >
         <motion.div
@@ -1457,8 +1753,8 @@ Berikan Penilaian Udara beserta Penjelasan Singkat dan jelas mengenai Risiko Kes
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5 }}
                   onError={(e) =>
-                    (e.target.src =
-                      "https://images.unsplash.com/photo-1584473457407-4c37b56a735c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80")
+                  (e.target.src =
+                    "https://images.unsplash.com/photo-1584473457407-4c37b56a735c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80")
                   }
                 />
               </div>
@@ -1650,10 +1946,11 @@ Berikan Penilaian Udara beserta Penjelasan Singkat dan jelas mengenai Risiko Kes
               <MapContainer
                 ref={mapRef}
                 center={
-                  initialLocation
-                    ? [initialLocation.lat, initialLocation.lon]
-                    : [-6.2088, 106.8456]
-                } // Use initial location if available
+                  location // Gunakan lokasi saat ini (dari state `location`)
+                    ? [location.lat, location.lon]
+                    : [-6.2088, 106.8456] // Fallback ke Jakarta jika `location` belum ada
+                }
+
                 zoom={initialLocation ? 20 : 10}
                 scrollWheelZoom={true}
                 className="h-[150px] sm:h-[250px] lg:h-[250px] w-full rounded-lg z-0"
@@ -1662,6 +1959,7 @@ Berikan Penilaian Udara beserta Penjelasan Singkat dan jelas mengenai Risiko Kes
                   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
+
                 <SearchControl onSearchResult={handleLocationSearchResult} />
                 {location && (
                   <Marker
@@ -1676,6 +1974,7 @@ Berikan Penilaian Udara beserta Penjelasan Singkat dan jelas mengenai Risiko Kes
                     </Popup>
                   </Marker>
                 )}
+
               </MapContainer>
             ) : (
               <div className="h-[300px] sm:h-[400px] lg:h-[450px] w-full rounded-lg flex items-center justify-center bg-[#e6f8f4] dark:bg-[#032b2e]">
@@ -1761,17 +2060,15 @@ Berikan Penilaian Udara beserta Penjelasan Singkat dan jelas mengenai Risiko Kes
           ) : pollutionData?.main && pollutionData?.components ? (
             <div className="space-y-6">
               <div
-                className={`p-5 rounded-lg flex items-center justify-between text-sm border border-[#72e4f8]/30 dark:border-[#07798d]/30 hover:bg-[#1ff498]/5 dark:hover:bg-[#0be084]/5 transition-colors ${
-                  getAqiStyling(pollutionData.main.aqi).bgColor
-                }`}
+                className={`p-5 rounded-lg flex items-center justify-between text-sm border border-[#72e4f8]/30 dark:border-[#07798d]/30 hover:bg-[#1ff498]/5 dark:hover:bg-[#0be084]/5 transition-colors ${getAqiStyling(pollutionData.main.aqi).bgColor
+                  }`}
               >
                 <span className="font-semibold text-[#01130c] dark:text-[#ecfef7]">
                   Indeks Kualitas Udara (AQI):
                 </span>
                 <span
-                  className={`font-bold px-2.5 py-1 rounded-full ${
-                    getAqiStyling(pollutionData.main.aqi).color
-                  }`}
+                  className={`font-bold px-2.5 py-1 rounded-full ${getAqiStyling(pollutionData.main.aqi).color
+                    }`}
                 >
                   {pollutionData.main.aqi} -{" "}
                   {getAqiStyling(pollutionData.main.aqi).level}
@@ -1915,8 +2212,8 @@ Berikan Penilaian Udara beserta Penjelasan Singkat dan jelas mengenai Risiko Kes
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5 }}
                   onError={(e) =>
-                    (e.target.src =
-                      "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80")
+                  (e.target.src =
+                    "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80")
                   }
                 />
               </div>
@@ -2108,7 +2405,32 @@ Berikan Penilaian Udara beserta Penjelasan Singkat dan jelas mengenai Risiko Kes
           </AnimatePresence>
         </motion.section>
 
-        <GrafikSampahIndonesia />
+       <motion.section
+          ref={refs.soilImpactCalculatorSection} // Referensi baru untuk section ini
+          initial="visible"
+          animate={controls.soilImpactCalculatorSection} // Kontrol baru untuk section ini
+          variants={sectionVariants}
+          className="bg-[#f6fefc] dark:bg-[#010907] border-2 border-[#72e4f8] dark:border-[#07798d] hover:border-[#1ff498] dark:hover:border-[#0be084] p-8 rounded-2xl shadow-sm hover:shadow-md transition-all space-y-6"
+        >
+          <SoilImpactCalculator
+            sectionVariants={sectionVariants}
+            itemVariants={itemVariants}
+          />
+        </motion.section>
+        {/* Kalkulator Dampak Lingkungan - END */}
+
+
+        {/* Waste Statistics Section */}
+        <motion.section
+          ref={refs.wasteStatsSection}
+          initial="visible"
+          animate={controls.wasteStatsSection}
+          variants={sectionVariants}
+          className="bg-[#f6fefc] dark:bg-[#010907] border-2 border-[#72e4f8] dark:border-[#07798d] hover:border-[#1ff498] dark:hover:border-[#0be084] p-8 rounded-2xl shadow-sm hover:shadow-md transition-all space-y-6"
+        >
+          <GrafikSampahIndonesia />
+        </motion.section>
+
 
         {/* Section 4: Edukasi Sampah */}
         <motion.section
@@ -2334,8 +2656,8 @@ Berikan Penilaian Udara beserta Penjelasan Singkat dan jelas mengenai Risiko Kes
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5 }}
                   onError={(e) =>
-                    (e.target.src =
-                      "https://images.unsplash.com/photo-1437957146754-f6377debe171?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80")
+                  (e.target.src =
+                    "https://images.unsplash.com/photo-1437957146754-f6377debe171?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80")
                   }
                 />
               </div>

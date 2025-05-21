@@ -744,7 +744,7 @@ const Home = () => {
             </Link>
           </motion.div>
 
-          {/* Feature Card - Financial Occupational Wellbeing */}
+          {/* Feature Card - Donation */}
           <motion.div
             variants={itemVariants}
             whileHover={{
@@ -754,7 +754,7 @@ const Home = () => {
             }}
           >
             <Link
-              to="/features/financial-occupational-wellbeing"
+              to="/features/donation"
               className="group feature-card"
             >
               <div className="bg-[#f6fefc] dark:bg-[#010907] border-2 border-[#72e4f8] dark:border-[#07798d] hover:border-[#1ff498] dark:hover:border-[#0be084] p-6 rounded-xl transition-all duration-300 h-full flex flex-col">
@@ -765,7 +765,7 @@ const Home = () => {
                   <Briefcase className="text-[#1ff498] dark:text-[#0be084] w-8 h-8" />
                 </motion.div>
                 <h3 className="text-xl font-bold mb-3">
-                  Kesejahteraan Finansial & Pekerjaan
+                  Donasi Untuk Kesehatan
                 </h3>
                 <p className="text-[#01130c]/80 dark:text-[#ecfef7]/80 mb-4 flex-grow">
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit.

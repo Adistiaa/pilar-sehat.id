@@ -1,10 +1,10 @@
+import React from 'react'
 import { motion } from "framer-motion";
-import useScrollAnimations from "../../components/AnimasiScroll";
-import { Bone } from "lucide-react";
+import useScrollAnimations from '../../components/AnimasiScroll';
+import { HandHeart } from "lucide-react";
 
-
-function PhysicalHealth() {
-// Get scroll animations from hook
+function Donation() {
+  // Get scroll animations from hook
   const { refs, controls, sectionVariants } = useScrollAnimations();
   // Animation variants defined here (not in hooks)
   const itemVariants = {
@@ -57,6 +57,7 @@ function PhysicalHealth() {
     },
   };
 
+  
   return (
     <div className="bg-[#f6fefc] dark:bg-[#010907] text-[#01130c] dark:text-[#ecfef7]"
       id="content"
@@ -76,8 +77,8 @@ function PhysicalHealth() {
                   className="inline-block border-2 border-[#1ff498] dark:border-[#0be084] text-[#01130c] dark:text-[#ecfef7] px-4 py-1 rounded-full mb-4"
                 >
                   <span className="flex items-center text-sm font-medium">
-                    <Bone className="w-4 h-4 mr-2" />
-                    Physical Health
+                    <HandHeart className="w-4 h-4 mr-2" />
+                    Donation
                   </span>
                 </motion.div>
       
@@ -85,9 +86,9 @@ function PhysicalHealth() {
                   variants={itemVariants}
                   className="text-3xl font-bold mb-4"
                 >
-                  Kesehatan{" "}
+                  Donasi{" "}
                   <span className="bg-gradient-to-r from-[#1ff498] to-[#50b7f7] bg-clip-text text-transparent">
-                    Fisik
+                    Membantu
                   </span>
                 </motion.h1>
       
@@ -104,4 +105,4 @@ function PhysicalHealth() {
   )
 }
 
-export default PhysicalHealth
+export default Donation

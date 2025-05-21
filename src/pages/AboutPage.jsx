@@ -8,7 +8,6 @@ import {
   Shield,
   Layers,
   Github,
-  Mail,
   Linkedin,
   Instagram,
   Map,
@@ -232,7 +231,7 @@ const AboutPage = () => {
             className="inline-block border-2 border-[#1ff498] dark:border-[#0be084] text-[#01130c] dark:text-[#ecfef7] px-4 py-1 rounded-full mb-4"
           >
             <span className="flex items-center text-sm font-medium">
-              <Users className="w-4 h-4 mr-2" />
+              <PenLine className="w-4 h-4 mr-2" />
               Tentang Kami
             </span>
           </motion.div>

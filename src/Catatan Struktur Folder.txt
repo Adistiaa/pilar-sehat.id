@@ -13,3 +13,279 @@ src/
 │       ├── EnvironmentalHealth.jsx
 │       ├── SocialConnections.jsx
 │       └── FinancialOccupationalWellbeing.jsx
+
+
+{/* Section 1: Map and Weather */}
+        <motion.section
+          initial="visible"
+          ref={refs.quotes}
+          animate={controls.quotes}
+          variants={sectionVariants}
+          className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start"
+        >
+          {/* Map Container */}
+          <motion.div
+            variants={itemVariants}
+            className="bg-[#f6fefc] dark:bg-[#010907] border-2 border-[#72e4f8] dark:border-[#07798d] hover:border-[#1ff498] dark:hover:border-[#0be084] p-8 rounded-2xl shadow-sm hover:shadow-md transition-all"
+          >
+            <motion.div
+              variants={itemVariants}
+              className="inline-block bg-[#1ff498]/20 dark:bg-[#0be084]/20 text-[#01130c] dark:text-[#ecfef7] px-4 py-1 rounded-full mb-4"
+            >
+              <span className="flex items-center text-sm font-medium">
+                <MapPin className="w-4 h-4 mr-2" />
+                Peta Interaktif
+              </span>
+            </motion.div>
+            {isDataLoading ? (
+              <div className="h-[300px] sm:h-[400px] lg:h-[450px] w-full rounded-lg flex items-center justify-center bg-[#e6f8f4] dark:bg-[#032b2e]">
+                <Loader2 className="w-8 h-8 animate-spin text-[#1ff498] dark:text-[#0be084]" />
+                <p className="ml-2 text-[#01130c]/70 dark:text-[#ecfef7]/70">Memuat peta...</p>
+              </div>
+            ) : location ? (
+              <MapContainer
+                ref={mapRef}
+                center={initialLocation ? [initialLocation.lat, initialLocation.lon] : [-6.2088, 106.8456]} // Use initial location if available
+                zoom={initialLocation ? 13 : 10}
+                scrollWheelZoom={true}
+                className="h-[150px] sm:h-[250px] lg:h-[250px] w-full rounded-lg z-0"
+              >
+                <TileLayer
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+                <SearchControl onSearchResult={handleLocationSearchResult} />
+                {location && (
+                  <Marker ref={markerRef} position={[location.lat, location.lon]}>
+                    <Popup>
+                      <b>{location.name || 'Lokasi Terpilih'}</b><br />
+                      Lat: {location.lat.toFixed(4)}, Lon: {location.lon.toFixed(4)}
+                    </Popup>
+                  </Marker>
+                )}
+              </MapContainer>
+            ) : (
+              <div className="h-[300px] sm:h-[400px] lg:h-[450px] w-full rounded-lg flex items-center justify-center bg-[#e6f8f4] dark:bg-[#032b2e]">
+                <p className="text-[#01130c]/70 dark:text-[#ecfef7]/70">Peta tidak tersedia.</p>
+              </div>
+            )}
+            <motion.button
+              onClick={returnToMyLocation}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              disabled={isDataLoading || isLoading || !initialLocation}
+              className="mt-4 bg-[#f6fefc] dark:bg-[#010907] border border-[#72e4f8] dark:border-[#07798d]
+                hover:border-[#1ff498] dark:hover:border-[#0be084] rounded-lg px-4 py-2 shadow-md
+                hover:shadow-lg text-[#01130c] dark:text-[#ecfef7] transition-all duration-200
+                flex items-center text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <LocateFixed className="w-4 h-4 mr-1.5" />
+              Lokasi Saya
+            </motion.button>
+          </motion.div>
+
+          {/* Weather Info Card */}
+          <motion.div
+            variants={itemVariants}
+            className="bg-[#f6fefc] dark:bg-[#010907] border-2 border-[#72e4f8] dark:border-[#07798d] hover:border-[#1ff498] dark:hover:border-[#0be084] p-8 rounded-2xl shadow-sm hover:shadow-md transition-all"
+          >
+            <motion.div
+              variants={itemVariants}
+              className="inline-block bg-[#1ff498]/20 dark:bg-[#0be084]/20 text-[#01130c] dark:text-[#ecfef7] px-4 py-1 rounded-full mb-4"
+            >
+              <span className="flex items-center text-sm font-medium">
+                <Cloud className="w-4 h-4 mr-2" />
+                Informasi Cuaca
+              </span>
+            </motion.div>
+            <div className="space-y-4">
+              {isDataLoading && !weatherData && (
+                <div className="flex flex-col items-center justify-center h-full">
+                  <Loader2 className="w-8 h-8 animate-spin text-[#1ff498] dark:text-[#0be084]" />
+                  <p className="mt-2 text-sm text-[#01130c]/70 dark:text-[#ecfef7]/70">Memuat cuaca...</p>
+                </div>
+              )}
+              {!isDataLoading && weatherData && <WeatherDisplay weatherData={weatherData} />}
+              {!isDataLoading && !weatherData && (
+                <p className="text-center text-sm text-[#01130c]/70 dark:text-[#ecfef7]/70">Data cuaca tidak tersedia untuk lokasi ini.</p>
+              )}
+            </div>
+          </motion.div>
+        </motion.section>
+
+        {/* Section 2: Pollution Data */}
+        <motion.section
+          ref={refs.trust}
+          variants={sectionVariants}
+          initial="visible"
+          animate={controls.trust}
+          className="bg-[#f6fefc] dark:bg-[#010907] border-2 border-[#72e4f8] dark:border-[#07798d] hover:border-[#1ff498] dark:hover:border-[#0be084] p-8 rounded-2xl shadow-sm hover:shadow-md transition-all"
+        >
+          <motion.div
+            variants={itemVariants}
+            className="inline-block bg-[#1ff498]/20 dark:bg-[#0be084]/20 text-[#01130c] dark:text-[#ecfef7] px-4 py-1 rounded-full mb-4"
+          >
+            <span className="flex items-center text-sm font-medium">
+              <Wind className="w-4 h-4 mr-2" />
+              Data Polusi Udara
+            </span>
+          </motion.div>
+          {isDataLoading && !pollutionData ? (
+            <div className="flex flex-col items-center justify-center h-full">
+              <Loader2 className="w-8 h-8 animate-spin text-[#1ff498] dark:text-[#0be084]" />
+              <p className="mt-2 text-sm text-[#01130c]/70 dark:text-[#ecfef7]/70">Memuat data polusi...</p>
+            </div>
+          ) : pollutionData?.main && pollutionData?.components ? (
+            <div className="space-y-6">
+              <div
+                className={`p-5 rounded-lg flex items-center justify-between text-sm border border-[#72e4f8]/30 dark:border-[#07798d]/30 hover:bg-[#1ff498]/5 dark:hover:bg-[#0be084]/5 transition-colors ${getAqiStyling(
+                  pollutionData.main.aqi
+                ).bgColor}`}
+              >
+                <span className="font-semibold text-[#01130c] dark:text-[#ecfef7]">
+                  Indeks Kualitas Udara (AQI):
+                </span>
+                <span
+                  className={`font-bold px-2.5 py-1 rounded-full ${getAqiStyling(pollutionData.main.aqi).color}`}
+                >
+                  {pollutionData.main.aqi} - {getAqiStyling(pollutionData.main.aqi).level}
+                </span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {Object.entries(pollutionData.components).map(([key, value]) => (
+                  <motion.div
+                    key={key}
+                    variants={itemVariants}
+                    className="p-4 bg-[#f6fefc] dark:bg-[#010907] border border-[#72e4f8]/30 dark:border-[#07798d]/30 rounded-lg hover:bg-[#1ff498]/5 dark:hover:bg-[#0be084]/5 transition-colors"
+                  >
+                    <strong className="block text-xs text-[#01130c]/70 dark:text-[#ecfef7]/70 uppercase">
+                      {key.replace(/_/g, '.').replace('pm25', 'PM2.5')}:
+                    </strong>
+                    <span className="text-base font-medium text-[#01130c] dark:text-[#ecfef7]">
+                      {typeof value === 'number' ? value.toFixed(2) : value} µg/m³
+                    </span>
+                  </motion.div>
+                ))}
+              </div>
+              <motion.div className="text-center" variants={itemVariants}>
+                <motion.button
+                  onClick={handleAiAnalysis}
+                  disabled={isAiLoading || isDataLoading}
+                  whileHover={{
+                    scale: 1.03,
+                    boxShadow: "0px 5px 15px rgba(31, 244, 152, 0.3)",
+                  }}
+                  whileTap={{ scale: 0.97 }}
+                  className="bg-gradient-to-r from-[#1ff498] to-[#50b7f7] hover:from-[#1ddc8c] hover:to-[#43a2dc] text-[#01130c] font-semibold px-6 py-2.5 rounded-lg shadow-md disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center mx-auto"
+                >
+                  {isAiLoading ? (
+                    <>
+                      <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                      Menganalisis...
+                    </>
+                  ) : (
+                    <>
+                      <Brain className="w-5 h-5 mr-2" />
+                      Analisis dengan AI
+                    </>
+                  )}
+                </motion.button>
+              </motion.div>
+            </div>
+          ) : (
+            <p className="text-center text-sm text-[#01130c]/70 dark:text-[#ecfef7]/70">
+              Data polusi tidak tersedia untuk lokasi ini.
+            </p>
+          )}
+        </motion.section>
+
+        {/* Section 3: AI Analysis */}
+        {isAiLoading ? (
+          <motion.section
+            ref={refs.features}
+            variants={sectionVariants}
+            initial="visible"
+            animate={controls.features}
+            className="bg-[#f6fefc] dark:bg-[#010907] border-2 border-[#72e4f8] dark:border-[#07798d] hover:border-[#1ff498] dark:hover:border-[#0be084] p-8 rounded-2xl shadow-sm hover:shadow-md transition-all"
+          >
+            <div className="flex flex-col items-center justify-center h-full">
+              <Loader2 className="w-8 h-8 animate-spin text-[#1ff498] dark:text-[#0be084]" />
+              <p className="mt-2 text-sm text-[#01130c]/70 dark:text-[#ecfef7]/70">AI sedang menganalisis...</p>
+            </div>
+          </motion.section>
+        ) : aiAnalysis ? (
+          <motion.section
+            ref={refs.whyChooseUs}
+            variants={sectionVariants}
+            initial="visible"
+            animate={controls.whyChooseUs}
+            className="bg-[#f6fefc] dark:bg-[#010907] border-2 border-[#72e4f8] dark:border-[#07798d] hover:border-[#1ff498] dark:hover:border-[#0be084] p-8 rounded-2xl shadow-sm hover:shadow-md transition-all"
+          >
+            <motion.div
+              variants={itemVariants}
+              className="inline-block bg-[#1ff498]/20 dark:bg-[#0be084]/20 text-[#01130c] dark:text-[#ecfef7] px-4 py-1 rounded-full mb-4"
+            >
+              <span className="flex items-center text-sm font-medium">
+                <Brain className="w-4 h-4 mr-2" />
+                Analisis Kualitas Udara (AI)
+              </span>
+            </motion.div>
+            <div className="prose prose-sm dark:prose-invert prose-p:text-[#01130c]/80 dark:prose-p:text-[#ecfef7]/80 prose-headings:text-[#01130c] dark:prose-headings:text-[#ecfef7] prose-strong:text-[#01130c] dark:prose-strong:text-[#ecfef7] prose-li:text-[#01130c]/80 dark:prose-li:text-[#ecfef7]/80 max-w-none leading-relaxed">
+              <ReactMarkdown>{aiAnalysis}</ReactMarkdown>
+            </div>
+          </motion.section>
+        ) : null}
+
+        <GrafikSampahIndonesia />
+
+
+        {/* Section 4: Edukasi Sampah */}
+        <motion.section
+          ref={refs.testimoni}
+          variants={sectionVariants}
+          initial="visible"
+          animate={controls.testimoni}
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="bg-[#f6fefc] dark:bg-[#010907] border-2 border-[#72e4f8] dark:border-[#07798d] hover:border-[#1ff498] dark:hover:border-[#0be084] p-8 rounded-2xl shadow-sm hover:shadow-md transition-all"
+        >
+          <motion.div variants={itemVariants} className="inline-block bg-[#a7f3d0]/20 dark:bg-[#22c55e]/20 text-[#01130c] dark:text-[#ecfef7] px-4 py-1 rounded-full mb-4">
+            <span className="flex items-center text-sm font-medium">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 mr-2">
+                <path fillRule="evenodd" d="M10.5 3.75a6.75 6.75 0 100 13.5 6.75 6.75 0 000-13.5zM2.25 10.5a8.25 8.25 0 1116.5 0 8.25 8.25 0 01-16.5 0zM12.75 7.5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0V8.25a.75.75 0 01.75-.75zm0 3a.75.75 0 111.5 0 .75.75 0 01-1.5 0z" clipRule="evenodd" />
+              </svg>
+              Edukasi Pengelolaan Sampah
+            </span>
+          </motion.div>
+          <div className="space-y-6">
+            <motion.h2 variants={itemVariants} className="text-xl font-semibold text-[#01130c] dark:text-[#ecfef7]">
+              Krisis Sampah di Indonesia: Fakta dan Solusi
+            </motion.h2>
+            <div className="prose prose-sm dark:prose-invert prose-p:text-[#01130c]/80 dark:prose-p:text-[#ecfef7]/80 prose-ul:list-disc prose-li:text-[#01130c]/80 dark:prose-li:text-[#ecfef7]/80 max-w-none leading-relaxed">
+              <p>Indonesia menghadapi tantangan besar dalam pengelolaan sampah. Setiap tahun, jutaan ton sampah dihasilkan, dan sebagian besar berakhir di tempat pembuangan akhir (TPA) yang sudah melebihi kapasitas, atau bahkan mencemari lingkungan seperti sungai dan laut.</p>
+              <h3>Fakta Penting:</h3>
+              <ul>
+                <li>Indonesia merupakan salah satu penyumbang sampah plastik terbesar ke laut dunia.</li>
+                <li>Tingkat daur ulang sampah di Indonesia masih sangat rendah.</li>
+                <li>Pengelolaan sampah yang tidak tepat dapat menyebabkan masalah kesehatan dan pencemaran lingkungan.</li>
+              </ul>
+              <h3>Jenis-jenis Sampah Utama di Indonesia:</h3>
+              <ul>
+                <li><strong>Sampah Organik:</strong> Sisa makanan, daun-daunan (sekitar 60% dari total sampah).</li>
+                <li><strong>Sampah Plastik:</strong> Kemasan, botol, kantong plastik (sekitar 15%).</li>
+                <li><strong>Sampah Kertas/Karton:</strong> Kardus, koran, majalah (sekitar 10%).</li>
+                <li><strong>Sampah Logam:</strong> Kaleng, besi (sekitar 5%).</li>
+                <li><strong>Sampah Lainnya:</strong> Kaca, kain, elektronik (sekitar 10%).</li>
+              </ul>
+              <h3>Solusi dan Upaya yang Dapat Dilakukan:</h3>
+              <ul>
+                <li><strong>Pengurangan Sampah dari Sumber:</strong> Membawa tas belanja sendiri, menghindari kemasan sekali pakai.</li>
+                <li><strong>Pemilahan Sampah:</strong> Memisahkan sampah organik, anorganik, dan B3 (Bahan Berbahaya dan Beracun).</li>
+                <li><strong>Daur Ulang:</strong> Mendukung industri daur ulang dan memanfaatkan kembali barang bekas.</li>
+                <li><strong>Pengomposan:</strong> Mengolah sampah organik menjadi pupuk kompos.</li>
+                <li><strong>Kebijakan Pemerintah:</strong> Penerapan regulasi yang lebih ketat terkait pengelolaan sampah dan dukungan terhadap inisiatif daur ulang.</li>
+              </ul>
+              <p>Mari bersama-sama berkontribusi untuk Indonesia yang lebih bersih dan sehat dengan mengelola sampah secara bertanggung jawab!</p>
+            </div>
+          </div>
+        </motion.section>

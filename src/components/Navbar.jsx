@@ -50,8 +50,8 @@ const Navbar = () => {
         },
         { name: "Social Connections", path: "/features/social-connections" },
         {
-          name: "Financial and Occupational Wellbeing",
-          path: "/features/financial-occupational-wellbeing",
+          name: "Donation",
+          path: "/features/donation",
         },
       ],
     },

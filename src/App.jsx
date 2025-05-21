@@ -7,7 +7,7 @@ import PhysicalHealth from "./pages/features/PhysicalHealth";
 import MentalHealthEmotions from "./pages/features/MentalHealthEmotions";
 import EnvironmentalHealth from "./pages/features/EnvironmentalHealth";
 import SocialConnections from "./pages/features/SocialConnections";
-import FinancialOccupationalWellbeing from "./pages/features/FinancialOccupationalWellbeing";
+import Donation from "./pages/features/Donation.jsx";
 import NotFoundPage from "./pages/NotFoundPage";
 
 import Navbar from "./components/Navbar";
@@ -43,7 +43,7 @@ function App() {
             <Route path="/features/mental-health-emotions" element={<MentalHealthEmotions />} />
             <Route path="/features/environmental-health" element={<EnvironmentalHealth />} />
             <Route path="/features/social-connections" element={<SocialConnections />} />
-            <Route path="/features/financial-occupational-wellbeing" element={<FinancialOccupationalWellbeing />} />
+            <Route path="/features/donation" element={<Donation />} />
 
             {/* 404 */}
             <Route path="*" element={<NotFoundPage />} />

@@ -98,3 +98,43 @@ html, body {
 .testimoni-swiper .swiper-button-prev {
   display: none !important;
 }
+
+/* Scrollbar Light Mode */
+:root {
+  --scrollbar-track: #f6fefc;
+  --scrollbar-thumb: #50b7f7;
+  --scrollbar-thumb-hover: #0be084;
+}
+
+/* Scrollbar Dark Mode */
+.dark {
+  --scrollbar-track: #010907;
+  --scrollbar-thumb: #086faf;
+  --scrollbar-thumb-hover: #1ff498;
+}
+
+/* Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 5px;
+  border: 2px solid var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+/* Firefox Support */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}

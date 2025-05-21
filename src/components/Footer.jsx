@@ -7,13 +7,12 @@ import {
   HeartPulse,
   Brain,
   Leaf,
-  Users,
   Home,
   PenLine,
   Headset,
   Handshake,
-  ChartLine,
-  Newspaper
+  Newspaper,
+  HandHeart
 } from "lucide-react";
 import { useLocation } from "react-router-dom";
 
@@ -210,14 +209,14 @@ const Footer = () => {
             <ul className="space-y-3 text-center md:text-left">
               <motion.li variants={itemVariants}>
                 <Link
-                  to="/features/financial-occupational-wellbeing"
+                  to="/features/donation"
                   className={`flex items-center gap-2 transition-colors duration-300 font-medium ${
-                    location.pathname === "/features/financial-occupational-wellbeing"
+                    location.pathname === "/features/donation"
                       ? "text-[#50b7f7] dark:text-[#0be084] font-semibold"
                       : "text-[#01130c] dark:text-[#ecfef7] hover:text-[#50b7f7] dark:hover:text-[#086faf]"
                   }`}
                 >
-                  <ChartLine size={18} /> Financial Wellbeing
+                  <HandHeart size={18} /> Donation
                 </Link>
               </motion.li>
               <motion.li

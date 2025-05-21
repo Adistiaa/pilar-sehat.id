@@ -2223,9 +2223,9 @@ Berikan Penilaian Udara beserta Penjelasan Singkat dan jelas mengenai Risiko Kes
             </div>
           </div>
         </motion.section>
-      </div>
 
-      {/* Section Air */}
+
+        {/* Section Air */}
         <motion.section
           initial="hidden"
           animate="visible"
@@ -2456,6 +2456,7 @@ Berikan Penilaian Udara beserta Penjelasan Singkat dan jelas mengenai Risiko Kes
             )}
           </AnimatePresence>
         </motion.section>
+      </div>
 
       {/* Footer Wave */}
       <div className="relative h-32 w-full overflow-hidden">

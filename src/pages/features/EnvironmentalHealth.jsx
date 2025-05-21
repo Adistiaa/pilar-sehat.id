@@ -2108,7 +2108,124 @@ Berikan Penilaian Udara beserta Penjelasan Singkat dan jelas mengenai Risiko Kes
           </AnimatePresence>
         </motion.section>
 
-        {/* Section Air */}
+        <GrafikSampahIndonesia />
+
+        {/* Section 4: Edukasi Sampah */}
+        <motion.section
+          ref={refs.testimoni}
+          variants={sectionVariants}
+          initial="visible"
+          animate={controls.testimoni}
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="bg-[#f6fefc] dark:bg-[#010907] border-2 border-[#72e4f8] dark:border-[#07798d] hover:border-[#1ff498] dark:hover:border-[#0be084] p-8 rounded-2xl shadow-sm hover:shadow-md transition-all"
+        >
+          <motion.div
+            variants={itemVariants}
+            className="inline-block bg-[#a7f3d0]/20 dark:bg-[#22c55e]/20 text-[#01130c] dark:text-[#ecfef7] px-4 py-1 rounded-full mb-4"
+          >
+            <span className="flex items-center text-sm font-medium">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="w-4 h-4 mr-2"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10.5 3.75a6.75 6.75 0 100 13.5 6.75 6.75 0 000-13.5zM2.25 10.5a8.25 8.25 0 1116.5 0 8.25 8.25 0 01-16.5 0zM12.75 7.5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0V8.25a.75.75 0 01.75-.75zm0 3a.75.75 0 111.5 0 .75.75 0 01-1.5 0z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              Edukasi Pengelolaan Sampah
+            </span>
+          </motion.div>
+          <div className="space-y-6">
+            <motion.h2
+              variants={itemVariants}
+              className="text-xl font-semibold text-[#01130c] dark:text-[#ecfef7]"
+            >
+              Krisis Sampah di Indonesia: Fakta dan Solusi
+            </motion.h2>
+            <div className="prose prose-sm dark:prose-invert prose-p:text-[#01130c]/80 dark:prose-p:text-[#ecfef7]/80 prose-ul:list-disc prose-li:text-[#01130c]/80 dark:prose-li:text-[#ecfef7]/80 max-w-none leading-relaxed">
+              <p>
+                Indonesia menghadapi tantangan besar dalam pengelolaan sampah.
+                Setiap tahun, jutaan ton sampah dihasilkan, dan sebagian besar
+                berakhir di tempat pembuangan akhir (TPA) yang sudah melebihi
+                kapasitas, atau bahkan mencemari lingkungan seperti sungai dan
+                laut.
+              </p>
+              <h3>Fakta Penting:</h3>
+              <ul>
+                <li>
+                  Indonesia merupakan salah satu penyumbang sampah plastik
+                  terbesar ke laut dunia.
+                </li>
+                <li>
+                  Tingkat daur ulang sampah di Indonesia masih sangat rendah.
+                </li>
+                <li>
+                  Pengelolaan sampah yang tidak tepat dapat menyebabkan masalah
+                  kesehatan dan pencemaran lingkungan.
+                </li>
+              </ul>
+              <h3>Jenis-jenis Sampah Utama di Indonesia:</h3>
+              <ul>
+                <li>
+                  <strong>Sampah Organik:</strong> Sisa makanan, daun-daunan
+                  (sekitar 60% dari total sampah).
+                </li>
+                <li>
+                  <strong>Sampah Plastik:</strong> Kemasan, botol, kantong
+                  plastik (sekitar 15%).
+                </li>
+                <li>
+                  <strong>Sampah Kertas/Karton:</strong> Kardus, koran, majalah
+                  (sekitar 10%).
+                </li>
+                <li>
+                  <strong>Sampah Logam:</strong> Kaleng, besi (sekitar 5%).
+                </li>
+                <li>
+                  <strong>Sampah Lainnya:</strong> Kaca, kain, elektronik
+                  (sekitar 10%).
+                </li>
+              </ul>
+              <h3>Solusi dan Upaya yang Dapat Dilakukan:</h3>
+              <ul>
+                <li>
+                  <strong>Pengurangan Sampah dari Sumber:</strong> Membawa tas
+                  belanja sendiri, menghindari kemasan sekali pakai.
+                </li>
+                <li>
+                  <strong>Pemilahan Sampah:</strong> Memisahkan sampah organik,
+                  anorganik, dan B3 (Bahan Berbahaya dan Beracun).
+                </li>
+                <li>
+                  <strong>Daur Ulang:</strong> Mendukung industri daur ulang dan
+                  memanfaatkan kembali barang bekas.
+                </li>
+                <li>
+                  <strong>Pengomposan:</strong> Mengolah sampah organik menjadi
+                  pupuk kompos.
+                </li>
+                <li>
+                  <strong>Kebijakan Pemerintah:</strong> Penerapan regulasi yang
+                  lebih ketat terkait pengelolaan sampah dan dukungan terhadap
+                  inisiatif daur ulang.
+                </li>
+              </ul>
+              <p>
+                Mari bersama-sama berkontribusi untuk Indonesia yang lebih
+                bersih dan sehat dengan mengelola sampah secara bertanggung
+                jawab!
+              </p>
+            </div>
+          </div>
+        </motion.section>
+      </div>
+
+      {/* Section Air */}
         <motion.section
           initial="hidden"
           animate="visible"
@@ -2339,123 +2456,6 @@ Berikan Penilaian Udara beserta Penjelasan Singkat dan jelas mengenai Risiko Kes
             )}
           </AnimatePresence>
         </motion.section>
-
-        <GrafikSampahIndonesia />
-
-        {/* Section 4: Edukasi Sampah */}
-        <motion.section
-          ref={refs.testimoni}
-          variants={sectionVariants}
-          initial="visible"
-          animate={controls.testimoni}
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="bg-[#f6fefc] dark:bg-[#010907] border-2 border-[#72e4f8] dark:border-[#07798d] hover:border-[#1ff498] dark:hover:border-[#0be084] p-8 rounded-2xl shadow-sm hover:shadow-md transition-all"
-        >
-          <motion.div
-            variants={itemVariants}
-            className="inline-block bg-[#a7f3d0]/20 dark:bg-[#22c55e]/20 text-[#01130c] dark:text-[#ecfef7] px-4 py-1 rounded-full mb-4"
-          >
-            <span className="flex items-center text-sm font-medium">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="w-4 h-4 mr-2"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M10.5 3.75a6.75 6.75 0 100 13.5 6.75 6.75 0 000-13.5zM2.25 10.5a8.25 8.25 0 1116.5 0 8.25 8.25 0 01-16.5 0zM12.75 7.5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0V8.25a.75.75 0 01.75-.75zm0 3a.75.75 0 111.5 0 .75.75 0 01-1.5 0z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              Edukasi Pengelolaan Sampah
-            </span>
-          </motion.div>
-          <div className="space-y-6">
-            <motion.h2
-              variants={itemVariants}
-              className="text-xl font-semibold text-[#01130c] dark:text-[#ecfef7]"
-            >
-              Krisis Sampah di Indonesia: Fakta dan Solusi
-            </motion.h2>
-            <div className="prose prose-sm dark:prose-invert prose-p:text-[#01130c]/80 dark:prose-p:text-[#ecfef7]/80 prose-ul:list-disc prose-li:text-[#01130c]/80 dark:prose-li:text-[#ecfef7]/80 max-w-none leading-relaxed">
-              <p>
-                Indonesia menghadapi tantangan besar dalam pengelolaan sampah.
-                Setiap tahun, jutaan ton sampah dihasilkan, dan sebagian besar
-                berakhir di tempat pembuangan akhir (TPA) yang sudah melebihi
-                kapasitas, atau bahkan mencemari lingkungan seperti sungai dan
-                laut.
-              </p>
-              <h3>Fakta Penting:</h3>
-              <ul>
-                <li>
-                  Indonesia merupakan salah satu penyumbang sampah plastik
-                  terbesar ke laut dunia.
-                </li>
-                <li>
-                  Tingkat daur ulang sampah di Indonesia masih sangat rendah.
-                </li>
-                <li>
-                  Pengelolaan sampah yang tidak tepat dapat menyebabkan masalah
-                  kesehatan dan pencemaran lingkungan.
-                </li>
-              </ul>
-              <h3>Jenis-jenis Sampah Utama di Indonesia:</h3>
-              <ul>
-                <li>
-                  <strong>Sampah Organik:</strong> Sisa makanan, daun-daunan
-                  (sekitar 60% dari total sampah).
-                </li>
-                <li>
-                  <strong>Sampah Plastik:</strong> Kemasan, botol, kantong
-                  plastik (sekitar 15%).
-                </li>
-                <li>
-                  <strong>Sampah Kertas/Karton:</strong> Kardus, koran, majalah
-                  (sekitar 10%).
-                </li>
-                <li>
-                  <strong>Sampah Logam:</strong> Kaleng, besi (sekitar 5%).
-                </li>
-                <li>
-                  <strong>Sampah Lainnya:</strong> Kaca, kain, elektronik
-                  (sekitar 10%).
-                </li>
-              </ul>
-              <h3>Solusi dan Upaya yang Dapat Dilakukan:</h3>
-              <ul>
-                <li>
-                  <strong>Pengurangan Sampah dari Sumber:</strong> Membawa tas
-                  belanja sendiri, menghindari kemasan sekali pakai.
-                </li>
-                <li>
-                  <strong>Pemilahan Sampah:</strong> Memisahkan sampah organik,
-                  anorganik, dan B3 (Bahan Berbahaya dan Beracun).
-                </li>
-                <li>
-                  <strong>Daur Ulang:</strong> Mendukung industri daur ulang dan
-                  memanfaatkan kembali barang bekas.
-                </li>
-                <li>
-                  <strong>Pengomposan:</strong> Mengolah sampah organik menjadi
-                  pupuk kompos.
-                </li>
-                <li>
-                  <strong>Kebijakan Pemerintah:</strong> Penerapan regulasi yang
-                  lebih ketat terkait pengelolaan sampah dan dukungan terhadap
-                  inisiatif daur ulang.
-                </li>
-              </ul>
-              <p>
-                Mari bersama-sama berkontribusi untuk Indonesia yang lebih
-                bersih dan sehat dengan mengelola sampah secara bertanggung
-                jawab!
-              </p>
-            </div>
-          </div>
-        </motion.section>
-      </div>
 
       {/* Footer Wave */}
       <div className="relative h-32 w-full overflow-hidden">
